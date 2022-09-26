@@ -1,2 +1,3 @@
-# node-vue3-bmsplus
-node + mongodb + vue3.2全家桶 + ts-最新技术栈通用后台管理系统
+# 一、项目概述
+vue3+ts
+后台服务使用nestjs

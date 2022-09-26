@@ -1,0 +1,6 @@
+# 告诉 ESLint 去忽略特定的文件和目录。
+node_modules
+dist
+.vscode
+public
+package-lock.json
