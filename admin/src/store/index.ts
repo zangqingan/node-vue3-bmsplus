@@ -7,5 +7,7 @@ export const mainStore = defineStore({
      // getters
     getters: {
         nameLength: (state) => state.name.length,
+        token: (state) => state.name.length,
     }
+    
 })

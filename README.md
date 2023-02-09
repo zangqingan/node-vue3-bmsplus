@@ -1,3 +1,4 @@
 # 一、项目概述
-vue3+ts
-后台服务使用nestjs
+vue3全家桶 + ts + nestjs + mongodb通用后台管理系统
+
+# 二、

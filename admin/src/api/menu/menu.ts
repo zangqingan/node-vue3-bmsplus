@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import axios from '../../utils/request/index'
 namespace Login {
   // 用户登录表单
   export interface LoginReqForm {
@@ -13,5 +13,5 @@ namespace Login {
 // 用户登录
 export const login = (params: Login.LoginReqForm) => {
     // 返回的数据格式可以和服务端约定
-    return request.post<Login.LoginResData>('/user/login', params);
+    return axios.post<Login.LoginResData>('/user/login', params);
 }

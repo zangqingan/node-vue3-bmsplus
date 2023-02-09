@@ -1,9 +1,9 @@
 import axios, {AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios'
-import {ElMessage} from 'element-plus'
+import {ElMessage,ElNotification} from 'element-plus'
 import NProgress from 'nprogress'
 import router from '@/router'
 
-// 数据返回的接口
+// 数据返回的接口 
 // 定义请求响应参数，不含data
 interface Result {
   code: number;
