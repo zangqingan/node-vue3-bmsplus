@@ -50,7 +50,42 @@ $ pnpm run test:cov
 ├───── app.service.ts 具有单一方法的基本服务(Service)
 ├───── main.ts nest 应用程序的入口文件，
 
-## 三、项目依赖
+## 三、项目依赖搭建
+
+### 1. 全局配置抽离
+这里使用的自定义配置文件( yaml 配置文件 )的方式、如下是一个生产环境的配置文件 dev.yml
+
+```yaml
+-- config/dev.yml
+# 开发环境配置
+app:
+  prefix: ''
+  port: 8080
+  logger:
+    # 项目日志存储路径，相对路径（相对本项目根目录）或绝对路径
+    dir: '../logs'
+  # 文件相关
+  file:
+    # 是否为本地文件服务或cos
+    isLocal: true
+    # location 文件上传后存储目录，相对路径（相对本项目根目录）或绝对路径
+    location: '../upload'
+    # 文件服务器地址，这是开发环境的配置 生产环境请自行配置成可访问域名
+    domain: 'http://localhost:8080'
+    # 文件虚拟路径, 必须以 / 开头， 如 http://localhost:8081/static/****.jpg  , 如果不需要则 设置 ''
+    serveRoot: '/upload'
+    # 文件大小限制，单位M
+    maxSize: 10
+```
+
+为了读取和解析 YAML 文件，我们可以利用 js-yaml 包。
+安装了该包后，我们使用 yaml#load 函数来加载上面创建的 YAML 文件  dev.yml。
+```bash
+$ pnpm install js-yaml
+$ pnpm i -D @types/js-yaml
+$ pnpm i --save @nestjs/config
+$ pnpm i -D cross-env
+```
 
 ## 四、项目配置
 
