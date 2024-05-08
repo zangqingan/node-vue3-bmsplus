@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    throw new HttpException('文章已存在', 401);
+    // return 'Hello World!';
   }
 }

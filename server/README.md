@@ -104,7 +104,14 @@ $ pnpm install --save @nestjs/swagger
 它作用是验证，要么返回值不变，要么抛出异常。
 ```bash
 $ pnpm i --save class-validator class-transformer
-$ nest g pi common/pipes/validation-pipe
+$ nest g pi common/pipes/validation-pipe --no-spec
+```
+
+### 5. 配置全局异常过滤器
+统一的异常处理器-在错误发生时做一个统一的过滤处理后再返回给前端。
+```bash
+$ nest g f common/filters/http-exception --no-spec
+
 ```
 
 ## License
