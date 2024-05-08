@@ -94,6 +94,11 @@ $ pnpm install --save @nestjs/typeorm typeorm mysql2
 
 ```
 
+### 3. swagger 接口文档配置
+```bash
+$ pnpm install --save @nestjs/swagger
+
+```
 
 
 ## License
