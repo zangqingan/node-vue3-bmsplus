@@ -100,6 +100,12 @@ $ pnpm install --save @nestjs/swagger
 
 ```
 
+### 4. 配置全局参数校验管道
+它作用是验证，要么返回值不变，要么抛出异常。
+```bash
+$ pnpm i --save class-validator class-transformer
+$ nest g pi common/pipes/validation-pipe
+```
 
 ## License
 

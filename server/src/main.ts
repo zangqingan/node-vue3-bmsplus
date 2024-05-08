@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config'; // 引入配置服务
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // 引入swagger配置
+import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, document); // 设置访问接口地址--> http://localhost:PORT/api-docs#/ 查看swagger文档
+
+  app.useGlobalPipes(new ValidationPipePipe()); // 全局注册参数验证管道
 
   await app.listen(PORT);
   console.log(`server is running at http://localhost:${PORT}`);
