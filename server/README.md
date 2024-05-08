@@ -87,9 +87,12 @@ $ pnpm i --save @nestjs/config
 $ pnpm i -D cross-env
 ```
 
-## 四、项目配置
+### 2. mysql 数据库连接
+为了读取全局配置里的东西、数据库连接使用异步方式。
+```bash
+$ pnpm install --save @nestjs/typeorm typeorm mysql2
 
-## 五、
+```
 
 
 
