@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config'; // 引入配置服务
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // 引入swagger配置
 import { rateLimit } from 'express-rate-limit'; // 引入限流中间件
 import helmet from 'helmet'; // 引入helmet防常见漏洞
+import { mv } from 'request-ip'; // 引入获取请求真实ip
 import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor';
@@ -26,6 +27,9 @@ async function bootstrap() {
 
   // 设置helmet防常见漏洞
   app.use(helmet());
+
+  // 获取请求的真实ip地址默认挂载在 req.clientIp 属性上
+  app.use(mv());
 
   // 配置swagger
   const swaggerConfig = new DocumentBuilder()

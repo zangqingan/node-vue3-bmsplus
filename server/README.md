@@ -189,6 +189,15 @@ $ pnpm install --save express-rate-limit
 $ pnpm install --save helmet
 ```
 
+## 七、其它
+
+### 1. 配置 request-ip 
+获取请求的IP地址、注册后自动挂载在 req.clientIp 对象熟悉上。
+也可以指定挂载的属性名称。
+```bash
+$ pnpm install --save request-ip 
+```
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
