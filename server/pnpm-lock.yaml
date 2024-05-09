@@ -29,6 +29,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.1
     version: 0.14.1
+  express-rate-limit:
+    specifier: ^7.2.0
+    version: 7.2.0(express@4.19.2)
   js-yaml:
     specifier: ^4.1.0
     version: 4.1.0
@@ -2678,6 +2681,15 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
     dev: true
+
+  /express-rate-limit@7.2.0(express@4.19.2):
+    resolution: {integrity: sha512-T7nul1t4TNyfZMJ7pKRKkdeVJWa2CqB8NA1P8BwYaoDI5QSBZARv5oMS43J7b7I5P+4asjVXjb7ONuwDKucahg==, tarball: https://registry.npmmirror.com/express-rate-limit/-/express-rate-limit-7.2.0.tgz}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: 4 || 5 || ^5.0.0-beta.1
+    dependencies:
+      express: 4.19.2
+    dev: false
 
   /express@4.19.2:
     resolution: {integrity: sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==, tarball: https://registry.npmmirror.com/express/-/express-4.19.2.tgz}

@@ -2,14 +2,26 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config'; // 引入配置服务
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // 引入swagger配置
+import { rateLimit } from 'express-rate-limit'; // 引入限流中间件
 import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   // 获取配置服务实例
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('app.port', 5000);
+
+  // 设置限流中间件
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+      standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+      legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    }),
+  );
 
   // 配置swagger
   const swaggerConfig = new DocumentBuilder()

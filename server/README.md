@@ -175,6 +175,15 @@ $ nest generate resource modules/monitor/loginLog --no-spec
 $ nest generate resource modules/monitor/operationLog --no-spec
 ```
 
+## 六、安全相关
+
+### 1. 配置 express-rate-limit 
+实现请求速率限制、防止DDoS攻击、和暴力破解。
+```bash
+$ pnpm install --save express-rate-limit
+```
+
+
 ## License
 
 Nest is [MIT licensed](LICENSE).

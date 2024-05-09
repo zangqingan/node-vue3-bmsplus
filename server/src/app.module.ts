@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config'; //导入配置模块
 import configuration from './config'; // 自定义的配置项
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'; // 配置连接数据库
@@ -49,7 +47,7 @@ import { OperationLogModule } from './modules/monitor/operation-log/operation-lo
     LoginLogModule,
     OperationLogModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
