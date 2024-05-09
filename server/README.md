@@ -183,6 +183,11 @@ $ nest generate resource modules/monitor/operationLog --no-spec
 $ pnpm install --save express-rate-limit
 ```
 
+### 2. 配置 helmet
+通过设置HTTP头来免受一些众所周知的网络漏洞。
+```bash
+$ pnpm install --save helmet
+```
 
 ## License
 

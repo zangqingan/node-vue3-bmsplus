@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config'; // 引入配置服务
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // 引入swagger配置
 import { rateLimit } from 'express-rate-limit'; // 引入限流中间件
+import helmet from 'helmet'; // 引入helmet防常见漏洞
 import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor';
@@ -22,6 +23,9 @@ async function bootstrap() {
       legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     }),
   );
+
+  // 设置helmet防常见漏洞
+  app.use(helmet());
 
   // 配置swagger
   const swaggerConfig = new DocumentBuilder()
