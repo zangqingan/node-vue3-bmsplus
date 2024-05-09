@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';//导入配置模块
-import configuration from './config';// 自定义的配置项
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';// 配置连接数据库
-import { UserModule } from './modules/user/user.module';
-import { RoleModule } from './modules/role/role.module';
-import { PostModule } from './modules/post/post.module';
+import { ConfigModule, ConfigService } from '@nestjs/config'; //导入配置模块
+import configuration from './config'; // 自定义的配置项
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'; // 配置连接数据库
+import { UserModule } from './modules/system/user/user.module';
+import { RoleModule } from './modules/system/role/role.module';
+import { PostModule } from './modules/system/post/post.module';
 import { DeptModule } from './modules/system/dept/dept.module';
 import { MenuModule } from './modules/system/menu/menu.module';
 import { DictModule } from './modules/system/dict/dict.module';
 import { NoticeModule } from './modules/system/notice/notice.module';
-import { ConfigModule } from './modules/system/config/config.module';
+import { SysConfigModule } from './modules/system/config/config.module';
+import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
+import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
 
 @Module({
   imports: [
@@ -19,21 +21,22 @@ import { ConfigModule } from './modules/system/config/config.module';
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
-      load: [configuration]
+      load: [configuration],
     }),
     // 注册 TypeOrmModule 提供者实现数据库的连接
     TypeOrmModule.forRootAsync({
-      imports:[ConfigModule],// 引入配置模块
-      inject:[ConfigService],// 注入配置服务以便读取配置文件中的内容
-      useFactory:(configService:ConfigService)=>{
+      imports: [ConfigModule], // 引入配置模块
+      inject: [ConfigService], // 注入配置服务以便读取配置文件中的内容
+      useFactory: (configService: ConfigService) => {
         return {
           type: 'mysql',
-          ...configService.get('db.mysql'),
           keepConnectionAlive: true,
-          synchronize: false,
+          synchronize: true,
+          entities: [`${__dirname}/**/*.entity{.ts,.js}`], // 加载所有的实体文件
           autoLoadEntities: true,
+          ...configService.get('db.mysql'),
         } as TypeOrmModuleOptions;
-      }
+      },
     }),
     UserModule,
     RoleModule,
@@ -42,7 +45,9 @@ import { ConfigModule } from './modules/system/config/config.module';
     MenuModule,
     DictModule,
     NoticeModule,
-    ConfigModule
+    SysConfigModule,
+    LoginLogModule,
+    OperationLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

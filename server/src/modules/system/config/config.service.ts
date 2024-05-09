@@ -3,7 +3,7 @@ import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 
 @Injectable()
-export class ConfigService {
+export class SysConfigService {
   create(createConfigDto: CreateConfigDto) {
     return 'This action adds a new config';
   }

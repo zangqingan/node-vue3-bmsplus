@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ConfigService } from './config.service';
+import { SysConfigService } from './config.service';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
 
 @Controller('config')
-export class ConfigController {
-  constructor(private readonly configService: ConfigService) {}
+export class SysConfigController {
+  constructor(private readonly configService: SysConfigService) {}
 
   @Post()
   create(@Body() createConfigDto: CreateConfigDto) {
+    // 二分
     return this.configService.create(createConfigDto);
   }
 

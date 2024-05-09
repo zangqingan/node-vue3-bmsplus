@@ -121,7 +121,7 @@ $ nest g itc common/interceptors/transform --no-spec
 
 ```
 
-## 四、业务模块开发
+## 四、系统内置业务模块开发
 
 ### 1.创建用户模块
 ```bash
@@ -161,6 +161,18 @@ $ nest generate resource modules/system/notice --no-spec
 ### 8.创建参数配置模块
 ```bash
 $ nest generate resource modules/system/config --no-spec
+```
+
+## 五、系统监控模块开发
+
+### 1.创建系统访问记录模块
+```bash
+$ nest generate resource modules/monitor/loginLog --no-spec
+```
+
+### 2.创建操作日志记录模块
+```bash
+$ nest generate resource modules/monitor/operationLog --no-spec
 ```
 
 ## License
