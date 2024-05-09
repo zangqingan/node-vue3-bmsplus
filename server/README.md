@@ -121,7 +121,47 @@ $ nest g itc common/interceptors/transform --no-spec
 
 ```
 
+## 四、业务模块开发
 
+### 1.创建用户模块
+```bash
+$ nest generate resource modules/system/user --no-spec
+```
+
+### 2.创建角色模块
+```bash
+$ nest generate resource modules/system/role --no-spec
+```
+
+### 3.创建岗位模块
+```bash
+$ nest generate resource modules/system/post --no-spec
+```
+
+### 4.创建部门模块
+```bash
+$ nest generate resource modules/system/dept --no-spec
+```
+
+### 5.创建菜单模块
+```bash
+$ nest generate resource modules/system/menu --no-spec
+```
+
+### 6.创建字典模块
+```bash
+$ nest generate resource modules/system/dict --no-spec
+```
+
+### 7.创建通知公告模块
+```bash
+$ nest generate resource modules/system/notice --no-spec
+```
+
+### 8.创建参数配置模块
+```bash
+$ nest generate resource modules/system/config --no-spec
+```
 
 ## License
 

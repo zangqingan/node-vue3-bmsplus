@@ -4,6 +4,14 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';//导入配置模块
 import configuration from './config';// 自定义的配置项
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';// 配置连接数据库
+import { UserModule } from './modules/user/user.module';
+import { RoleModule } from './modules/role/role.module';
+import { PostModule } from './modules/post/post.module';
+import { DeptModule } from './modules/system/dept/dept.module';
+import { MenuModule } from './modules/system/menu/menu.module';
+import { DictModule } from './modules/system/dict/dict.module';
+import { NoticeModule } from './modules/system/notice/notice.module';
+import { ConfigModule } from './modules/system/config/config.module';
 
 @Module({
   imports: [
@@ -26,7 +34,15 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';// 配置�
           autoLoadEntities: true,
         } as TypeOrmModuleOptions;
       }
-    })
+    }),
+    UserModule,
+    RoleModule,
+    PostModule,
+    DeptModule,
+    MenuModule,
+    DictModule,
+    NoticeModule,
+    ConfigModule
   ],
   controllers: [AppController],
   providers: [AppService],
