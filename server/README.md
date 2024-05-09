@@ -114,6 +114,15 @@ $ nest g f common/filters/http-exception --no-spec
 
 ```
 
+### 6. 配置全局响应拦截器
+对请求成功(状态码为 2xx)的数据在返回给前台前进行一个统一的格式化处理
+```bash
+$ nest g itc common/interceptors/transform --no-spec
+
+```
+
+
+
 ## License
 
 Nest is [MIT licensed](LICENSE).
