@@ -121,6 +121,11 @@ $ nest g itc common/interceptors/transform --no-spec
 
 ```
 
+### 7. 配置验证码
+```bash
+pnpm add svg-captcha
+```
+
 ## 四、系统内置业务模块开发
 
 ### 1.创建用户模块

@@ -29,7 +29,7 @@ import { OperationLogModule } from './modules/monitor/operation-log/operation-lo
         return {
           type: 'mysql',
           keepConnectionAlive: true,
-          synchronize: true,
+          synchronize: false,
           entities: [`${__dirname}/**/*.entity{.ts,.js}`], // 加载所有的实体文件
           autoLoadEntities: true,
           ...configService.get('db.mysql'),
