@@ -124,6 +124,22 @@ $ nest g itc common/interceptors/transform --no-spec
 ### 7. 配置验证码
 ```bash
 pnpm add svg-captcha
+生成的数据
+console.log(captcha.data); // 输出 SVG 图像
+console.log(captcha.text); // 输出验证码文本，用于后端验证
+```
+
+### 8. 配置redis
+配置redis，同时安装uuid包用来生成唯一的key。
+
+```bash
+$ pnpm install --save uuid
+$ pnpm install --save redis
+$ pnpm install --save ioredis // 或者使用这个包
+$ nest g module common/utils/redis
+$ nest g service common/utils/redis --no-spec
+
+
 ```
 
 ## 四、系统内置业务模块开发

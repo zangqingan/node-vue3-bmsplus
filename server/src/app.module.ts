@@ -12,6 +12,7 @@ import { NoticeModule } from './modules/system/notice/notice.module';
 import { SysConfigModule } from './modules/system/config/config.module';
 import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
 import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
+import { RedisModule } from './common/utils/redis/redis.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { OperationLogModule } from './modules/monitor/operation-log/operation-lo
     SysConfigModule,
     LoginLogModule,
     OperationLogModule,
+    RedisModule,
   ],
   controllers: [],
   providers: [],
