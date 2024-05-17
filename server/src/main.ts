@@ -40,7 +40,7 @@ async function bootstrap() {
     .addBearerAuth() // 接口增加token认证
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api-docs', app, document); // 设置访问接口地址--> http://localhost:PORT/api-docs#/ 查看swagger文档
+  SwaggerModule.setup('api-docs', app, document, { jsonDocumentUrl: 'api-docs.json' }); // 设置访问接口地址--> http://localhost:PORT/api-docs#/ 查看swagger文档
 
   app.useGlobalPipes(new ValidationPipePipe()); // 全局注册参数验证管道
   app.useGlobalInterceptors(new TransformInterceptor()); // 全局注册返回数据格式化响应拦截器
