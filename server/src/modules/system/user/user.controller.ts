@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiParam } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,8 +27,10 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @ApiOperation({ summary: '获取指定用户' })
+  @ApiParam({ name: 'userId', description: 'User ID', required: true, type: Number })
+  @Get(':userId')
+  findOne(@Param('userId') id: string) {
     return this.userService.findOne(+id);
   }
 

@@ -14,7 +14,7 @@ export class ValidationPipePipe implements PipeTransform {
     // 调用 class-validator 包的 validate api 对它做验证。如果验证不通过，就抛一个异常。
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new BadRequestException('Validation failed');
+      throw new BadRequestException(`Validation failed: ${errors}`);
     }
     return value;
   }

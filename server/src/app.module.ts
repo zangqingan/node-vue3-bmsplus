@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config'; //导入配置模块
-import configuration from './config'; // 自定义的配置项
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'; // 配置连接数据库
+import configuration from './config'; // 自定义的配置项
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { UserModule } from './modules/system/user/user.module';
 import { RoleModule } from './modules/system/role/role.module';
 import { PostModule } from './modules/system/post/post.module';
@@ -49,7 +51,7 @@ import { RedisModule } from './common/utils/redis/redis.module';
     OperationLogModule,
     RedisModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
