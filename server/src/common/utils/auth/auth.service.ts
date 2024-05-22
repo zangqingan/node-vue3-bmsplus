@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -23,10 +23,9 @@ export class AuthService {
   async parseToken(token: string) {
     try {
       if (!token) return null;
-      const payload = this.jwtService.verify(token.replace('Bearer ', ''));
-      return payload;
+      return this.jwtService.verify(token.replace('Bearer ', ''));
     } catch (error) {
-      throw new Error(`token失效${error}`);
+      throw new UnauthorizedException(`登录 token 失效，请重新登录${error}`);
     }
   }
 }

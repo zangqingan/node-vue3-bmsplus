@@ -22,4 +22,10 @@ export class AppController {
   async login(@Body() user: LoginDto): Promise<LoginDto> {
     return this.appService.login(user);
   }
+
+  @ApiOperation({ summary: '获取验证码' })
+  @Get('/captchaImage')
+  captchaImage() {
+    return this.appService.generateCaptcha();
+  }
 }

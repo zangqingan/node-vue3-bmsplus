@@ -10,12 +10,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: '获取验证码' })
-  @Get('/captchaImage')
-  captchaImage() {
-    return this.userService.generateCaptcha();
-  }
-
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);

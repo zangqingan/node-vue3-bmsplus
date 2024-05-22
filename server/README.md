@@ -142,12 +142,22 @@ $ nest g service common/utils/redis --no-spec
 
 ```
 
-### 9. 配置 jwt token 实现登录认证
+### 9. 配置 jwt token 实现认证
 ```bash
 $ pnpm install --save @nestjs/jwt
-$ pnpm install --save @nestjs/passport passport passport-jwt
+#  使用Passport集成身份验证库
+$ pnpm install --save @nestjs/passport passport 
+# 使用 passport-jwt 策略
+$ pnpm install --save-dev @types/passport-jwt
+$ pnpm install --save passport-jwt
+# 用来匹配路由
+$ pnpm install --save path-to-regexp 
+
 $ nest g module common/utils/auth --no-spec
 $ nest g service common/utils/auth --no-spec
+
+# 创建全局校验守卫类-实现身份验证
+$ nest g guard common/guards/auth --no-spec
 
 ```
 
