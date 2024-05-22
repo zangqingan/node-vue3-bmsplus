@@ -25,11 +25,12 @@ export class RoleService {
   }
 
   /**
+   * 根据角色id数组查询角色信息
    * @param roleIds 角色id数组
    * @returns 角色id数组对应的角色对象信息数组
    */
-  findRoleByIds(roleIds: number[]) {
-    return this.sysRoleRepository.find({ where: { roleId: In(roleIds), delFlag: DeleteFlagEnum.NORMAL } });
+  async findRoleByIds(roleIds: number[]) {
+    return await this.sysRoleRepository.find({ where: { roleId: In(roleIds), delFlag: DeleteFlagEnum.NORMAL } });
   }
 
   /**

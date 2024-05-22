@@ -142,6 +142,19 @@ $ nest g service common/utils/redis --no-spec
 
 ```
 
+### 9. 配置 jwt token 实现登录认证
+```bash
+$ pnpm install --save @nestjs/jwt
+$ pnpm install --save @nestjs/passport passport passport-jwt
+$ nest g module common/utils/auth --no-spec
+$ nest g service common/utils/auth --no-spec
+
+```
+
+### 10. 配置授权模块
+
+
+
 ## 四、系统内置业务模块开发
 
 ### 1.创建用户模块

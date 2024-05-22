@@ -15,6 +15,7 @@ import { SysConfigModule } from './modules/system/config/config.module';
 import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
 import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
 import { RedisModule } from './common/utils/redis/redis.module';
+import { AuthModule } from './common/utils/auth/auth.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { RedisModule } from './common/utils/redis/redis.module';
     LoginLogModule,
     OperationLogModule,
     RedisModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -13,7 +13,7 @@ export class AppService {
    * @param user
    * @returns
    */
-  async login(user: LoginDto): Promise<LoginDto> {
+  async login(user: LoginDto): Promise<any> {
     return await this.userService.login(user);
   }
 }
