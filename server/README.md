@@ -158,6 +158,9 @@ $ nest g service common/utils/auth --no-spec
 
 # 创建全局校验守卫类-实现身份验证
 $ nest g guard common/guards/auth --no-spec
+# 在common/guards/auth 创建jwt策略文件 jwt.strategy.ts
+# 将其作为提供者添加到 AuthModule 中
+
 
 ```
 

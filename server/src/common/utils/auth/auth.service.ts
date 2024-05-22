@@ -15,14 +15,12 @@ export class AuthService {
   }
 
   /**
-   * 从令牌中获取数据声明
-   *
+   * 从令牌中获取数据声明，在使用jwt策略时会自动解密token并验证
    * @param token 令牌
    * @return 数据声明
    */
   async parseToken(token: string) {
     try {
-      if (!token) return null;
       return this.jwtService.verify(token.replace('Bearer ', ''));
     } catch (error) {
       throw new UnauthorizedException(`登录 token 失效，请重新登录${error}`);

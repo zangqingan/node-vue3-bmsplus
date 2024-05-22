@@ -19,7 +19,7 @@ export class AppController {
   @ApiBody({ type: LoginDto, required: true })
   @Post('/login')
   @HttpCode(200)
-  async login(@Body() user: LoginDto): Promise<LoginDto> {
+  async login(@Body() user: LoginDto): Promise<object> {
     return this.appService.login(user);
   }
 
