@@ -10,7 +10,7 @@ import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pi
 import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   // 获取配置服务实例
   const configService = app.get(ConfigService);
