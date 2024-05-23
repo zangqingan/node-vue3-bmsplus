@@ -161,10 +161,15 @@ $ nest g guard common/guards/auth --no-spec
 # 在common/guards/auth 创建jwt策略文件 jwt.strategy.ts
 # 将其作为提供者添加到 AuthModule 中
 
-
 ```
 
-### 10. 配置授权模块
+### 10. 配置登录日志模块
+```bash
+# 用来获取客户端相关信息
+$ pnpm i useragent
+# 记录登录时间
+$ pnpm i dayjs 
+```
 
 
 

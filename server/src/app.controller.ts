@@ -1,4 +1,4 @@
-import { Controller, Post, Body, HttpCode, Get } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Get, Request } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { LoginDto } from 'src/common/dto/index';
@@ -19,8 +19,8 @@ export class AppController {
   @ApiBody({ type: LoginDto, required: true })
   @Post('/login')
   @HttpCode(200)
-  async login(@Body() user: LoginDto): Promise<object> {
-    return this.appService.login(user);
+  async login(@Body() user: LoginDto, @Request() req): Promise<object> {
+    return this.appService.login(user, req);
   }
 
   @ApiOperation({ summary: '获取验证码' })

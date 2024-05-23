@@ -31,9 +31,9 @@ export class LoginDto {
 export class RegisterDto extends LoginDto {}
 
 export class ClientInfoDto {
-  ipaddr: string;
   userAgent: string;
-  browser: string;
+  ipAddr: string;
   os: string;
+  browser: string;
   loginLocation: string;
 }

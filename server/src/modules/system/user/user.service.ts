@@ -75,6 +75,7 @@ export class UserService {
     if (!isExist) {
       throw new HttpException('帐号或密码错误', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    // 获取用户信息
     const userData = await this.getUserInfo(isExist.userId);
 
     // 判断账号是否正常状态
@@ -88,7 +89,6 @@ export class UserService {
     // 生成token
     const uniqueId = generateUUID();
     const token = await this.authService.createToken({ uuid: uniqueId, userId: userData.userId });
-    console.log('toke1n', token);
 
     // 登录信息存redis
     const cacheData = {

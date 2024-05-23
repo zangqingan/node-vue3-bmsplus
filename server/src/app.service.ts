@@ -1,25 +1,51 @@
 import * as svgCaptcha from 'svg-captcha';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { Request } from 'express';
+
+import { UserService } from './modules/system/user/user.service';
+import { LoginLogService } from './modules/monitor/login-log/login-log.service';
 
 import { RedisService } from 'src/common/utils/redis/redis.service';
 import { LoginDto } from 'src/common/dto/index';
-import { generateUUID } from 'src/common/utils/tools';
-
-import { UserService } from './modules/system/user/user.service';
+import { generateUUID, getClientInfo } from 'src/common/utils/tools';
 
 @Injectable()
 export class AppService {
   constructor(
     private readonly userService: UserService,
     private readonly redisService: RedisService,
+    private readonly loginLogService: LoginLogService,
   ) {}
+
   /**
    * 登录
    * @param user
-   * @returns
+   * @returns token
    */
-  async login(user: LoginDto): Promise<any> {
-    return await this.userService.login(user);
+  async login(user: LoginDto, req: Request): Promise<any> {
+    // 查询用户客户端信息
+    const clientInfo = getClientInfo(req);
+    // 构建用户登录日志信息
+    const userLoginInfo = {
+      ...clientInfo,
+      userName: user.userName,
+      status: '0',
+      msg: '',
+    };
+    try {
+      const result = await this.userService.login(user);
+      userLoginInfo.msg = '登录成功';
+      return result;
+    } catch (error) {
+      // 发生错误时修改登录日志信息
+      userLoginInfo.status = '1';
+      userLoginInfo.msg = error.message;
+      // 把异常重新抛出去
+      throw new HttpException(error.message, error.status);
+    } finally {
+      // 存储登录日志
+      await this.loginLogService.create(userLoginInfo);
+    }
   }
 
   /**
