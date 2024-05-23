@@ -12,6 +12,7 @@ import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
 import { SysConfigModule } from './modules/system/config/config.module';
 import { NoticeModule } from './modules/system/notice/notice.module';
 import { RedisModule } from './common/utils/redis/redis.module';
+import { AxiosModule } from './common/utils/axios/axios.module';
 import { UserModule } from './modules/system/user/user.module';
 import { RoleModule } from './modules/system/role/role.module';
 import { PostModule } from './modules/system/post/post.module';
@@ -57,6 +58,7 @@ import { JwtAuthGuard } from './common/guards/auth/auth.guard';
     OperationLogModule,
     RedisModule,
     AuthModule,
+    AxiosModule,
   ],
   controllers: [AppController],
   providers: [

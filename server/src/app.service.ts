@@ -3,6 +3,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
 import { UserService } from './modules/system/user/user.service';
+import { AxiosService } from 'src/common/utils/axios/axios.service';
 import { LoginLogService } from './modules/monitor/login-log/login-log.service';
 
 import { RedisService } from 'src/common/utils/redis/redis.service';
@@ -14,6 +15,7 @@ export class AppService {
   constructor(
     private readonly userService: UserService,
     private readonly redisService: RedisService,
+    private readonly axiosService: AxiosService,
     private readonly loginLogService: LoginLogService,
   ) {}
 
@@ -33,8 +35,12 @@ export class AppService {
       msg: '',
     };
     try {
+      // 获取ip对应的地址信息
+      const addressInfo = await this.axiosService.getIpAddress(clientInfo.ipAddr);
+      userLoginInfo.loginLocation = addressInfo;
+      // 登录
       const result = await this.userService.login(user);
-      userLoginInfo.msg = '登录成功';
+      userLoginInfo.msg = result.message;
       return result;
     } catch (error) {
       // 发生错误时修改登录日志信息

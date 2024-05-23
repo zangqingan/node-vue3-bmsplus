@@ -101,7 +101,7 @@ export class UserService {
     await this.redisService.set(`${CacheEnum.LOGIN_TOKEN_KEY}${uniqueId}`, JSON.stringify(cacheData), 60 * 60 * 24);
 
     // 返回token
-    return { token };
+    return { token, message: '登录成功' };
   }
 
   /**

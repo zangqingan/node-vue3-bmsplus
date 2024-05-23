@@ -32,9 +32,9 @@ export function getNowDate() {
  */
 export function getClientInfo(req): ClientInfoDto {
   // 返回一个agent实例
-  const userAgent = Useragent.parse(req.headers['user-agent'] || '');
+  const userAgent = Useragent.parse(req.headers['User-Agent'] || '');
   return {
-    userAgent: req.headers['user-agent'],
+    userAgent: req.headers['User-Agent'],
     ipAddr: req.clientIp,
     os: userAgent.os.toJSON().family,
     browser: userAgent.toAgent(),

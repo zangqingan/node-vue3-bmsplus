@@ -1,6 +1,8 @@
 import { Controller, Post, Body, HttpCode, Get, Request } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { AppService } from './app.service';
+
 import { LoginDto } from 'src/common/dto/index';
 
 @ApiTags('公共接口')
@@ -11,8 +13,9 @@ export class AppController {
   @ApiOperation({ summary: '测试接口' })
   @Get('/test')
   @HttpCode(200)
-  async test(): Promise<string> {
-    return 'test';
+  async test(@Request() req): Promise<any> {
+    console.log(req.clientIp);
+    return 'result';
   }
 
   @ApiOperation({ summary: '用户登录' })

@@ -169,6 +169,14 @@ $ nest g guard common/guards/auth --no-spec
 $ pnpm i useragent
 # 记录登录时间
 $ pnpm i dayjs 
+
+# 安装iconv-lite 用于字符编码转换
+$ pnpm i iconv-lite
+# 封装axios网络请求，根据ip地址获取地理位置
+$ pnpm i --save @nestjs/axios axios
+# 封装axios模块
+$ nest g module common/utils/axios --no-spec
+$ nest g service common/utils/axios --no-spec
 ```
 
 
