@@ -44,7 +44,14 @@ export class AppController {
 
   @ApiOperation({ summary: '获取验证码' })
   @Get('/captchaImage')
-  captchaImage() {
+  async captchaImage() {
     return this.appService.generateCaptcha();
+  }
+
+  @ApiOperation({ summary: '获取用户信息' })
+  @Get('/getInfo')
+  @HttpCode(200)
+  async getInfo(@Request() req) {
+    return this.appService.getInfo(req);
   }
 }

@@ -63,6 +63,9 @@ export class AppService {
     return await this.userService.register(user);
   }
 
+  /**
+   * 退出登录
+   */
   async logout() {
     return { message: '退出成功' };
   }
@@ -88,6 +91,20 @@ export class AppService {
     return {
       uniqueId,
       svgData,
+    };
+  }
+
+  /**
+   * 获取用户信息
+   * @param userId
+   * @returns
+   */
+  async getInfo(req) {
+    // 会从redis中获取缓存的用户信息
+    const user = JSON.parse(req.user);
+    return {
+      message: '操作成功',
+      user: { ...user.user },
     };
   }
 }
