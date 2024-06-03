@@ -54,4 +54,11 @@ export class AppController {
   async getInfo(@Request() req) {
     return this.appService.getInfo(req);
   }
+
+  @ApiOperation({ summary: '获取动态路由' })
+  @Get('/getRouters')
+  @HttpCode(200)
+  async getRoutes() {
+    return this.appService.getRoutes();
+  }
 }
