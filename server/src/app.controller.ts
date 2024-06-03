@@ -34,6 +34,14 @@ export class AppController {
     return this.appService.register(user);
   }
 
+  @ApiOperation({ summary: '用户登出' })
+  @ApiBody({ type: LoginDto, required: true })
+  @Post('/logout')
+  @HttpCode(200)
+  async logout(): Promise<object> {
+    return this.appService.logout();
+  }
+
   @ApiOperation({ summary: '获取验证码' })
   @Get('/captchaImage')
   captchaImage() {

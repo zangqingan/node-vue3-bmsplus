@@ -54,8 +54,17 @@ export class AppService {
     }
   }
 
+  /**
+   * 注册
+   * @param user
+   * @returns
+   */
   async register(user: RegisterDto) {
     return await this.userService.register(user);
+  }
+
+  async logout() {
+    return { message: '退出成功' };
   }
 
   /**
