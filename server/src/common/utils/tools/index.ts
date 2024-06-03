@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import * as Useragent from 'useragent';
 import { v4 as uuidV4 } from 'uuid';
 

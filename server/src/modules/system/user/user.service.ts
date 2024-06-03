@@ -8,8 +8,8 @@ import { RoleService } from '../role/role.service';
 import { PostService } from '../post/post.service';
 
 import { DeleteFlagEnum, StatusEnum, CacheEnum } from 'src/common/enum';
-import { LoginDto } from 'src/common/dto';
-import { generateUUID } from 'src/common/utils/tools';
+import { LoginDto, RegisterDto } from 'src/common/dto';
+import { generateUUID, getNowDate } from 'src/common/utils/tools';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -102,6 +102,23 @@ export class UserService {
 
     // 返回token
     return { token, message: '登录成功' };
+  }
+
+  async register(user: RegisterDto) {
+    // 生成创建时间
+    const loginDate = getNowDate();
+    const isExist = await this.userRepository.findOne({
+      where: {
+        userName: user.userName,
+      },
+      select: ['userId'],
+    });
+    if (isExist) {
+      throw new HttpException('用户名已存在', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    // 创建用户
+    const result = await this.userRepository.save({ ...user, loginDate });
+    return result;
   }
 
   /**

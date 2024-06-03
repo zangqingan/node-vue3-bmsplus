@@ -7,7 +7,7 @@ import { AxiosService } from 'src/common/utils/axios/axios.service';
 import { LoginLogService } from './modules/monitor/login-log/login-log.service';
 
 import { RedisService } from 'src/common/utils/redis/redis.service';
-import { LoginDto } from 'src/common/dto/index';
+import { LoginDto, RegisterDto } from 'src/common/dto/index';
 import { generateUUID, getClientInfo } from 'src/common/utils/tools';
 
 @Injectable()
@@ -54,12 +54,16 @@ export class AppService {
     }
   }
 
+  async register(user: RegisterDto) {
+    return await this.userService.register(user);
+  }
+
   /**
    * 生成验证码
    */
   async generateCaptcha() {
     const captcha = svgCaptcha.create({
-      size: 6, // 验证码长度
+      size: 4, // 验证码长度
       ignoreChars: '0o1i', // 排除 0o1i
       noise: 2, // 噪声线条数量
       color: true, // 验证码的字符有颜色，而不是黑白

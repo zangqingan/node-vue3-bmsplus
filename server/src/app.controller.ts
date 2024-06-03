@@ -3,7 +3,7 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 
-import { LoginDto } from 'src/common/dto/index';
+import { LoginDto, RegisterDto } from 'src/common/dto/index';
 
 @ApiTags('公共接口')
 @Controller()
@@ -24,6 +24,14 @@ export class AppController {
   @HttpCode(200)
   async login(@Body() user: LoginDto, @Request() req): Promise<object> {
     return this.appService.login(user, req);
+  }
+
+  @ApiOperation({ summary: '用户注册' })
+  @ApiBody({ type: RegisterDto, required: true })
+  @Post('/register')
+  @HttpCode(200)
+  async register(@Body() user: RegisterDto): Promise<object> {
+    return this.appService.register(user);
   }
 
   @ApiOperation({ summary: '获取验证码' })
