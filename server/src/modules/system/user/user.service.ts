@@ -12,9 +12,7 @@ import { DeleteFlagEnum, StatusEnum, CacheEnum, DataScopeEnum } from 'src/common
 import { LoginDto, RegisterDto } from 'src/common/dto';
 import { generateUUID, getNowDate } from 'src/common/utils/tools';
 
-import { ListUserDto } from './dto/index';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { ListUserDto, CreateUserDto, UpdateUserDto } from './dto/index';
 
 import { User } from './entities/user.entity';
 import { SysUserWithRoleEntity } from './entities/user-roles.entity';
@@ -39,8 +37,33 @@ export class UserService {
     private readonly deptService: DeptService,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  /**
+   * 创建用户
+   * @param createUserDto
+   * @returns
+   */
+  async create(createUserDto: CreateUserDto) {
+    const loginDate = getNowDate();
+    // 先生成用户
+    const result = await this.userRepository.save({ ...createUserDto, loginDate });
+    // 要手动更新：用户-角色表、用户-岗位表,如果有的话
+    // 用户-角色一对多关系数据数组
+    const roleValuesArr = createUserDto.roleIds.map((id) => {
+      return {
+        userId: result.userId,
+        roleId: +id,
+      };
+    });
+    // 使用查询构造器批量插入角色数据
+    await this.userWithRoleRepository.createQueryBuilder('userWithRole').insert().values(roleValuesArr).execute();
+    const postValuesArr = createUserDto.postIds.map((id) => {
+      return {
+        userId: result.userId,
+        postId: +id,
+      };
+    });
+    await this.userWithPostRepository.createQueryBuilder('userWithPost').insert().values(postValuesArr).execute();
+    return result;
   }
 
   /**
@@ -132,7 +155,10 @@ export class UserService {
   async remove(ids: string) {
     const menuIds = ids.split(',').map((id) => +id);
     const result = await this.userRepository.update({ userId: In(menuIds) }, { delFlag: DeleteFlagEnum.DELETE });
-    return result;
+    if (result.affected < 1) {
+      throw new HttpException('删除失败', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return { code: 200, message: '删除成功' };
   }
 
   /**
