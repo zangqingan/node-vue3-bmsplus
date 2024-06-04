@@ -12,7 +12,7 @@ import { DeleteFlagEnum, StatusEnum, CacheEnum, DataScopeEnum } from 'src/common
 import { LoginDto, RegisterDto } from 'src/common/dto';
 import { generateUUID, getNowDate } from 'src/common/utils/tools';
 
-import { ListUserDto, CreateUserDto, UpdateUserDto } from './dto/index';
+import { ListUserDto, CreateUserDto, UpdateUserDto, ResetPwdDto } from './dto/index';
 
 import { User } from './entities/user.entity';
 import { SysUserWithRoleEntity } from './entities/user-roles.entity';
@@ -210,6 +210,16 @@ export class UserService {
 
     // 更新用户信息
     return await this.userRepository.update({ userId: updateUserDto.userId }, updateUserDto);
+  }
+
+  /**
+   * 重置密码
+   * @param resetPwdDto
+   * @returns
+   */
+  async resetPwd(resetPwdDto: ResetPwdDto) {
+    await this.userRepository.update({ userId: resetPwdDto.userId }, { password: resetPwdDto.password });
+    return { message: '重置密码成功' };
   }
 
   /**

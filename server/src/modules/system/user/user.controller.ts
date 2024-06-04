@@ -3,7 +3,7 @@ import { ApiOperation, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 
-import { ListUserDto, CreateUserDto, UpdateUserDto } from './dto/index';
+import { ListUserDto, CreateUserDto, UpdateUserDto, ResetPwdDto } from './dto/index';
 
 @ApiTags('用户管理')
 @Controller('system/user')
@@ -36,6 +36,13 @@ export class UserController {
   @Put()
   update(@Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(updateUserDto);
+  }
+
+  @ApiOperation({ summary: '重置密码' })
+  @ApiBody({ type: ResetPwdDto, required: true })
+  @Put('/resetPwd')
+  resetPassword(@Body() resetPwdDto: ResetPwdDto) {
+    return this.userService.resetPwd(resetPwdDto);
   }
 
   @ApiOperation({ summary: '删除用户' })

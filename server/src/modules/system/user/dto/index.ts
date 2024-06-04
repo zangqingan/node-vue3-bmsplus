@@ -119,3 +119,17 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsNumberString()
   userId: number;
 }
+
+/**
+ * 重置密码参数
+ */
+export class ResetPwdDto {
+  @ApiProperty({ required: true })
+  @IsNumberString()
+  userId: number;
+
+  @ApiProperty({ required: true })
+  @IsString()
+  @Length(5, 20)
+  password: string;
+}
