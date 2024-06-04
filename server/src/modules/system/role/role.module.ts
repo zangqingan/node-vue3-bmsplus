@@ -12,6 +12,6 @@ import { SysRoleWithDeptEntity } from './entities/role-dept.entity';
   imports: [TypeOrmModule.forFeature([SysRoleEntity, SysRoleWithMenuEntity, SysRoleWithDeptEntity])],
   controllers: [RoleController],
   providers: [RoleService],
-  exports: [RoleService],
+  exports: [RoleService], // 导出角色服务
 })
 export class RoleModule {}

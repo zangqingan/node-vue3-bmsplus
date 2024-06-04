@@ -51,4 +51,22 @@ export class RoleService {
   remove(id: number) {
     return `This action removes a #${id} role`;
   }
+
+  /**
+   * 根据角色ID异步查找与之关联的部门ID列表。
+   *
+   * @param roleId - 角色的ID，用于查询与该角色关联的部门。
+   * @returns 返回一个Promise，该Promise解析为一个部门ID的数组。
+   */
+  async findRoleWithDeptIds(roleId: number) {
+    // 使用TypeORM的实体仓库查询方法，异步查找与指定角色ID相关联的部门ID。
+    const res = await this.sysRoleWithDeptRepository.find({
+      select: ['deptId'],
+      where: {
+        roleId: roleId,
+      },
+    });
+    // 将查询结果映射为仅包含部门ID的数组并返回。
+    return res.map((item) => item.deptId);
+  }
 }

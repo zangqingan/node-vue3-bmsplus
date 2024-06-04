@@ -36,7 +36,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: { uuid: string; userId: number; iat: Date }) {
     // 从redis中获取缓存的用户信息
     const user = await this.redisService.get(`${CacheEnum.LOGIN_TOKEN_KEY}${payload.uuid}`);
-    console.log('redis中缓存的数据', user);
+    // console.log('redis中缓存的数据', user);
     // 如果用用户信息，代表 token 没有过期，没有则 token 已失效
     if (!user) throw new UnauthorizedException('登录已过期，请重新登录');
     //  可以使用 req.user 获取当前登录用户信息
