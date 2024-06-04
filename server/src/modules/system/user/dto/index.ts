@@ -114,4 +114,8 @@ export class CreateUserDto {
 /**
  * 更新用户参数
  */
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) {
+  @ApiProperty({ required: true })
+  @IsNumberString()
+  userId: number;
+}

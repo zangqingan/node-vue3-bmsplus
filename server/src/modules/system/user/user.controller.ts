@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
@@ -31,9 +31,11 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @ApiOperation({ summary: '更新用户' })
+  @ApiBody({ type: UpdateUserDto, required: true })
+  @Put()
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(updateUserDto);
   }
 
   @ApiOperation({ summary: '删除用户' })

@@ -56,6 +56,8 @@ export class UserService {
     });
     // 使用查询构造器批量插入角色数据
     await this.userWithRoleRepository.createQueryBuilder('userWithRole').insert().values(roleValuesArr).execute();
+
+    // 用户-岗位一对多关系数据数组
     const postValuesArr = createUserDto.postIds.map((id) => {
       return {
         userId: result.userId,
@@ -143,8 +145,71 @@ export class UserService {
     return await this.userRepository.findOne({ where: { userId: id } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  /**
+   * 更新用户
+   * @param updateUserDto
+   * @returns
+   */
+  async update(updateUserDto: UpdateUserDto) {
+    // 对已有角色、岗位对应信息先全删除再重新添加。
+
+    // 用户已有岗位,先删除所有关联岗位
+    if (updateUserDto?.postIds?.length > 0) {
+      const hasPostId = await this.userWithPostRepository.findOne({
+        where: {
+          userId: updateUserDto.userId,
+        },
+        select: ['postId'],
+      });
+
+      if (hasPostId) {
+        await this.userWithPostRepository.delete({
+          userId: updateUserDto.userId,
+        });
+      }
+      // 重新添加用户-岗位关联信息
+      const postValuesArr = updateUserDto.postIds.map((id) => {
+        return {
+          userId: updateUserDto.userId,
+          postId: +id,
+        };
+      });
+      await this.userWithPostRepository.createQueryBuilder('userWithPost').insert().values(postValuesArr).execute();
+    }
+
+    // 用户已有角色,先删除所有关联角色
+    if (updateUserDto?.roleIds?.length > 0) {
+      const hasRoleId = await this.userWithRoleRepository.findOne({
+        where: {
+          userId: updateUserDto.userId,
+        },
+        select: ['roleId'],
+      });
+      if (hasRoleId) {
+        await this.userWithRoleRepository.delete({
+          userId: updateUserDto.userId,
+        });
+      }
+      // 重新添加用户-角色关联信息
+      const roleValuesArr = updateUserDto.roleIds.map((id) => {
+        return {
+          userId: updateUserDto.userId,
+          roleId: +id,
+        };
+      });
+      // 使用查询构造器批量插入角色数据
+      await this.userWithRoleRepository.createQueryBuilder('userWithRole').insert().values(roleValuesArr).execute();
+    }
+
+    // 删除后面自己家的属性
+    delete updateUserDto.password;
+    delete updateUserDto.roleIds;
+    delete updateUserDto.postIds;
+    delete (updateUserDto as any).dept;
+    delete (updateUserDto as any).roles;
+
+    // 更新用户信息
+    return await this.userRepository.update({ userId: updateUserDto.userId }, updateUserDto);
   }
 
   /**
