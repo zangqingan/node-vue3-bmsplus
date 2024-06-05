@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
-import { DataScopeEnum } from 'src/common/enum';
+import { DataScopeEnum, DeleteFlagEnum } from 'src/common/enum';
+import { arrayToTree } from 'src/common/utils/tools/index';
+
 import { CreateDeptDto } from './dto/create-dept.dto';
 import { UpdateDeptDto } from './dto/update-dept.dto';
 
@@ -32,6 +34,19 @@ export class DeptService {
   }
 
   /**
+   * 部门树
+   * @returns
+   */
+  async deptTree() {
+    const res = await this.sysDeptRepository.find({
+      where: {
+        delFlag: DeleteFlagEnum.NORMAL,
+      },
+    });
+    return arrayToTree(res);
+  }
+
+  /**
    * 根据数据权限范围和部门ID查询部门ID列表。
    * @param deptId 部门ID，表示需要查询的部门。
    * @param dataScope 数据权限范围，决定查询的部门范围。
@@ -42,7 +57,7 @@ export class DeptService {
       // 创建部门实体的查询构建器
       const entity = this.sysDeptRepository.createQueryBuilder('dept');
       // 筛选出删除标志为未删除的部门
-      entity.where('dept.delFlag = :delFlag', { delFlag: '0' });
+      entity.where('dept.delFlag = :delFlag', { delFlag: DeleteFlagEnum.NORMAL });
 
       // 根据不同的数据权限范围添加不同的查询条件
       if (dataScope === DataScopeEnum.DATA_SCOPE_DEPT) {

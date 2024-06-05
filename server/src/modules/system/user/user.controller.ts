@@ -24,6 +24,12 @@ export class UserController {
     return this.userService.findAll(query, user);
   }
 
+  @ApiOperation({ summary: '用户-部门树列表' })
+  @Get('/deptTree')
+  deptTree() {
+    return this.userService.deptTree();
+  }
+
   @ApiOperation({ summary: '获取指定用户详情' })
   @ApiParam({ name: 'id', description: 'User ID', required: true, type: Number })
   @Get(':id')
@@ -50,6 +56,12 @@ export class UserController {
   @Put('/resetPwd')
   resetPassword(@Body() resetPwdDto: ResetPwdDto) {
     return this.userService.resetPwd(resetPwdDto);
+  }
+
+  @ApiOperation({ summary: '用户-角色信息-更新' })
+  @Put('/authRole')
+  updateAuthRole(@Query() query) {
+    return this.userService.updateAuthRole(query);
   }
 
   @ApiOperation({ summary: '删除用户' })

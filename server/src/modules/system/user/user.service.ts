@@ -137,14 +137,21 @@ export class UserService {
   }
 
   /**
+   * 部门树
+   * @returns
+   */
+  async deptTree() {
+    return await this.deptService.deptTree();
+  }
+
+  /**
    * 根据id查询用户信息
    * @param id
    * @returns
    */
   async findOne(id: number) {
     // 获取用户信息
-    const userResult = await this.getUserInfo(id);
-    return userResult;
+    return await this.getUserInfo(id);
   }
 
   /**
@@ -212,6 +219,37 @@ export class UserService {
 
     // 更新用户信息
     return await this.userRepository.update({ userId: updateUserDto.userId }, updateUserDto);
+  }
+
+  /**
+   * 更新用户-角色关联对应信息
+   * @param query
+   * @returns
+   */
+  async updateAuthRole(query) {
+    const roleIds = query.roleIds.split(',');
+    if (roleIds?.length > 0) {
+      //用户已有角色,先删除所有关联角色
+      const hasRoleId = await this.userWithRoleRepository.findOne({
+        where: {
+          userId: query.userId,
+        },
+        select: ['roleId'],
+      });
+      if (hasRoleId) {
+        await this.userWithRoleRepository.delete({
+          userId: query.userId,
+        });
+      }
+      const roleValuesArr = roleIds.map((id) => {
+        return {
+          userId: query.userId,
+          roleId: +id,
+        };
+      });
+      await this.userWithRoleRepository.createQueryBuilder('userWithRole').insert().values(roleValuesArr).execute();
+    }
+    return { message: '修改成功' };
   }
 
   /**
