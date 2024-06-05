@@ -1,36 +1,124 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { DataScopeEnum, DeleteFlagEnum } from 'src/common/enum';
 import { arrayToTree } from 'src/common/utils/tools/index';
 
-import { CreateDeptDto } from './dto/create-dept.dto';
-import { UpdateDeptDto } from './dto/update-dept.dto';
+import { CreateDeptDto, UpdateDeptDto } from './dto';
 
 import { SysDeptEntity } from './entities/dept.entity';
 
 @Injectable()
 export class DeptService {
-  constructor(@InjectRepository(SysDeptEntity) private readonly sysDeptRepository: Repository<SysDeptEntity>) {}
-  create(createDeptDto: CreateDeptDto) {
-    return 'This action adds a new dept';
+  constructor(
+    @InjectRepository(SysDeptEntity)
+    private readonly sysDeptRepository: Repository<SysDeptEntity>,
+  ) {}
+
+  /**
+   * 新增部门
+   * @param createDeptDto
+   */
+  async create(createDeptDto: CreateDeptDto) {
+    if (createDeptDto.parentId) {
+      const parent = await this.sysDeptRepository.findOne({
+        where: {
+          deptId: createDeptDto.parentId,
+          delFlag: DeleteFlagEnum.NORMAL,
+        },
+        select: ['ancestors'],
+      });
+      if (!parent) {
+        throw new HttpException('父级部门不存在', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      const ancestors = parent.ancestors ? `${parent.ancestors},${createDeptDto.parentId}` : `${createDeptDto.parentId}`;
+      Object.assign(createDeptDto, { ancestors: ancestors });
+    }
+    await this.sysDeptRepository.save(createDeptDto);
+    return { msg: '新增成功' };
   }
 
-  findAll() {
-    return `This action returns all dept`;
+  /**
+   * 查询所有部门
+   * @returns
+   */
+  async findAll() {
+    return await this.sysDeptRepository.find({
+      where: {
+        delFlag: DeleteFlagEnum.NORMAL,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} dept`;
+  /**
+   * 根据ID查询部门
+   * @param id
+   * @returns
+   */
+  async findOne(id: number) {
+    const data = await this.sysDeptRepository.findOne({
+      where: {
+        deptId: id,
+        delFlag: DeleteFlagEnum.NORMAL,
+      },
+    });
+    return data;
   }
 
-  update(id: number, updateDeptDto: UpdateDeptDto) {
-    return `This action updates a #${id} dept`;
+  /**
+   * 查询部门列表
+   * @param query
+   * @returns
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async findListExclude(id: string) {
+    //TODO 需排出ancestors 中不出现id的数据
+    const data = await this.sysDeptRepository.find({
+      where: {
+        delFlag: DeleteFlagEnum.NORMAL,
+      },
+    });
+    return data;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} dept`;
+  /**
+   * 更新部门信息
+   * @param updateDeptDto
+   * @returns
+   */
+  async update(updateDeptDto: UpdateDeptDto) {
+    if (updateDeptDto.parentId) {
+      const parent = await this.sysDeptRepository.findOne({
+        where: {
+          deptId: updateDeptDto.parentId,
+          delFlag: DeleteFlagEnum.NORMAL,
+        },
+        select: ['ancestors'],
+      });
+      if (!parent) {
+        throw new HttpException('父级部门不存在', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      const ancestors = parent.ancestors ? `${parent.ancestors},${updateDeptDto.parentId}` : `${updateDeptDto.parentId}`;
+      Object.assign(updateDeptDto, { ancestors: ancestors });
+    }
+    await this.sysDeptRepository.update({ deptId: updateDeptDto.deptId }, updateDeptDto);
+    return { message: '更新成功' };
+  }
+
+  /**
+   * 删除部门
+   * @param id
+   * @returns
+   */
+  async remove(id: number) {
+    const data = await this.sysDeptRepository.update(
+      { deptId: id },
+      {
+        delFlag: DeleteFlagEnum.DELETE,
+      },
+    );
+    return data;
   }
 
   /**
