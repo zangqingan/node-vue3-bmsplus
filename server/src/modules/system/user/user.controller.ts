@@ -3,7 +3,7 @@ import { ApiOperation, ApiTags, ApiParam, ApiBody } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 
-import { ListUserDto, CreateUserDto, UpdateUserDto, ResetPwdDto } from './dto/index';
+import { ListUserDto, CreateUserDto, UpdateUserDto, ChangeStatusDto, ResetPwdDto } from './dto/index';
 
 @ApiTags('用户管理')
 @Controller('system/user')
@@ -24,10 +24,10 @@ export class UserController {
     return this.userService.findAll(query, user);
   }
 
-  @ApiOperation({ summary: '获取指定用户' })
-  @ApiParam({ name: 'userId', description: 'User ID', required: true, type: Number })
-  @Get(':userId')
-  findOne(@Param('userId') id: string) {
+  @ApiOperation({ summary: '获取指定用户详情' })
+  @ApiParam({ name: 'id', description: 'User ID', required: true, type: Number })
+  @Get(':id')
+  findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
@@ -36,6 +36,13 @@ export class UserController {
   @Put()
   update(@Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(updateUserDto);
+  }
+
+  @ApiOperation({ summary: '用户- 停用角色' })
+  @ApiBody({ type: ChangeStatusDto, required: true })
+  @Put('/changeStatus')
+  changeStatus(@Body() changeStatusDto: ChangeStatusDto) {
+    return this.userService.changeStatus(changeStatusDto);
   }
 
   @ApiOperation({ summary: '重置密码' })

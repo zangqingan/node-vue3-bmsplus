@@ -12,7 +12,7 @@ import { DeleteFlagEnum, StatusEnum, CacheEnum, DataScopeEnum } from 'src/common
 import { LoginDto, RegisterDto } from 'src/common/dto';
 import { generateUUID, getNowDate } from 'src/common/utils/tools';
 
-import { ListUserDto, CreateUserDto, UpdateUserDto, ResetPwdDto } from './dto/index';
+import { ListUserDto, CreateUserDto, UpdateUserDto, ChangeStatusDto, ResetPwdDto } from './dto/index';
 
 import { User } from './entities/user.entity';
 import { SysUserWithRoleEntity } from './entities/user-roles.entity';
@@ -76,7 +76,7 @@ export class UserService {
    */
   async findAll(query: ListUserDto, user: any) {
     // 创建查询器
-    const userQueryResult = await this.userRepository.createQueryBuilder('user').where('user.delFlag = :delFlag', { delFlag: '0' });
+    const userQueryResult = await this.userRepository.createQueryBuilder('user').where('user.delFlag = :delFlag', { delFlag: DeleteFlagEnum.NORMAL });
     // 根据用户登录信息进行数据权限过滤
     if (user) {
       const roles = user.roles;
@@ -142,7 +142,9 @@ export class UserService {
    * @returns
    */
   async findOne(id: number) {
-    return await this.userRepository.findOne({ where: { userId: id } });
+    // 获取用户信息
+    const userResult = await this.getUserInfo(id);
+    return userResult;
   }
 
   /**
@@ -210,6 +212,21 @@ export class UserService {
 
     // 更新用户信息
     return await this.userRepository.update({ userId: updateUserDto.userId }, updateUserDto);
+  }
+
+  /**
+   * 修改用户状态
+   * @param changeStatusDto
+   * @returns
+   */
+  async changeStatus(changeStatusDto: ChangeStatusDto) {
+    const res = await this.userRepository.update(
+      { userId: changeStatusDto.userId },
+      {
+        status: changeStatusDto.status,
+      },
+    );
+    return res;
   }
 
   /**

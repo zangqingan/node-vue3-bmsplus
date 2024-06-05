@@ -133,3 +133,17 @@ export class ResetPwdDto {
   @Length(5, 20)
   password: string;
 }
+
+/**
+ * 更新用户状态参数
+ */
+export class ChangeStatusDto {
+  @ApiProperty({ required: true })
+  @IsNumberString()
+  userId: number;
+
+  @ApiProperty({ required: true })
+  @IsString()
+  @IsEnum(StatusEnum)
+  status: string;
+}
