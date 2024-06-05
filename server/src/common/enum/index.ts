@@ -69,3 +69,10 @@ export enum DataScopeEnum {
   DATA_SCOPE_DEPT_AND_CHILD = '4',
   DATA_SCOPE_SELF = '5',
 }
+
+//菜单类型
+export enum RoleTypeEnum {
+  M = 'M',
+  C = 'C',
+  F = 'F',
+}
