@@ -71,7 +71,7 @@ export enum DataScopeEnum {
 }
 
 //菜单类型
-export enum RoleTypeEnum {
+export enum MenuTypeEnum {
   M = 'M',
   C = 'C',
   F = 'F',
