@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiConsumes, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Delete, Query } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { LoginLogService } from './login-log.service';
 
-import { CreateLoginLogDto } from './dto/create-loginlog.dto';
-import { UpdateLoginLogDto } from './dto/update-loginlog.dto';
+import { CreateLoginLogDto, ListLoginLogDto } from './dto';
 
 @ApiTags('登录日志')
 @Controller('monitor/loginLog')
@@ -16,24 +15,22 @@ export class LoginLogController {
     return this.loginLogService.create(createLoginlogDto);
   }
 
-  @Get()
-  findAll() {
-    return this.loginLogService.findAll();
+  @ApiOperation({ summary: '登录日志-列表' })
+  @ApiBody({ type: ListLoginLogDto, required: true })
+  @Get('/list')
+  findAll(@Query() query: ListLoginLogDto) {
+    return this.loginLogService.findAll(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.loginLogService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLoginlogDto: UpdateLoginLogDto) {
-    return this.loginLogService.update(+id, updateLoginlogDto);
-  }
-
+  @ApiOperation({ summary: '登录日志-删除日志' })
   @Delete(':id')
   remove(@Param('id') ids: string) {
-    const infoIds = ids.split(',').map((id) => +id);
-    return this.loginLogService.remove(infoIds);
+    return this.loginLogService.remove(ids);
+  }
+
+  @ApiOperation({ summary: '登录日志-清除全部日志' })
+  @Delete('/clean')
+  removeAll() {
+    return this.loginLogService.removeAll();
   }
 }
