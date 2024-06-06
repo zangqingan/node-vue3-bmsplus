@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { DeptService } from './dept.service';
 import { CreateDeptDto, UpdateDeptDto } from './dto';
 
-@Controller('dept')
+@ApiTags('部门管理')
+@Controller('system/dept')
 export class DeptController {
   constructor(private readonly deptService: DeptService) {}
 

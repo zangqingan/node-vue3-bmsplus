@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
-import { ApiOperation, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { PostService } from './post.service';
 import { CreatePostDto, UpdatePostDto, ListPostDto } from './dto';
 
-@Controller('post')
+@ApiTags('岗位管理')
+@Controller('system/post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

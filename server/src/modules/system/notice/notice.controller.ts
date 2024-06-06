@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto, UpdateNoticeDto, ListNoticeDto } from './dto';
-import { ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('notice')
+@ApiTags('通知公告')
+@Controller('system/notice')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 

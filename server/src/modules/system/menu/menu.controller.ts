@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
 import { MenuService } from './menu.service';
 
 import { CreateMenuDto, UpdateMenuDto } from './dto';
-import { ApiBody, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
-@Controller('menu')
+@ApiTags('菜单管理')
+@Controller('system/menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 

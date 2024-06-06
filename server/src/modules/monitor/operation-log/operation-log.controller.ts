@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { OperationLogService } from './operation-log.service';
 import { CreateOperationLogDto } from './dto/create-operation-log.dto';
 import { UpdateOperationLogDto } from './dto/update-operation-log.dto';
 
-@Controller('operation-log')
+@ApiTags('操作日志')
+@Controller('monitor/operation-log')
 export class OperationLogController {
   constructor(private readonly operationLogService: OperationLogService) {}
 

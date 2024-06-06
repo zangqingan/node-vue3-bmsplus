@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SysConfigService } from './config.service';
 import { CreateConfigDto } from './dto/create-config.dto';
 import { UpdateConfigDto } from './dto/update-config.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('config')
+@ApiTags('参数配置')
+@Controller('system/config')
 export class SysConfigController {
   constructor(private readonly configService: SysConfigService) {}
 
