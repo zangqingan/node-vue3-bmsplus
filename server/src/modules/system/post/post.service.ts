@@ -3,16 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
 import { DeleteFlagEnum } from 'src/common/enum';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import { CreatePostDto, UpdatePostDto, ListPostDto } from './dto';
 
 import { SysPostEntity } from './entities/post.entity';
 
 @Injectable()
 export class PostService {
   constructor(@InjectRepository(SysPostEntity) private readonly postRepository: Repository<SysPostEntity>) {}
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+
+  /**
+   * 新增岗位
+   * @param createPostDto
+   */
+  async create(createPostDto: CreatePostDto) {
+    await this.postRepository.save(createPostDto);
+    return { message: '新增岗位成功' };
   }
 
   /**
@@ -27,19 +32,62 @@ export class PostService {
   /**
    * @returns 查询所有岗位信息
    */
-  async findAll() {
-    return await this.postRepository.find({ where: { delFlag: DeleteFlagEnum.NORMAL } });
+  async findAll(query: ListPostDto) {
+    const postQueryResult = this.postRepository.createQueryBuilder('post').where('post.delFlag = :delFlag', { delFlag: DeleteFlagEnum.NORMAL });
+
+    if (query.postName) {
+      postQueryResult.andWhere(`post.postName LIKE "%${query.postName}%"`);
+    }
+
+    if (query.postCode) {
+      postQueryResult.andWhere(`post.postCode LIKE "%${query.postCode}%"`);
+    }
+
+    if (query.status) {
+      postQueryResult.andWhere('post.status = :status', { status: query.status });
+    }
+
+    postQueryResult.skip(query.pageSize * (query.pageNum - 1)).take(query.pageSize);
+    const [list, total] = await postQueryResult.getManyAndCount();
+
+    return { list, total };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  /**
+   * 获取岗位详情
+   * @param query
+   */
+  async findOne(id: number) {
+    const res = await this.postRepository.findOne({
+      where: {
+        postId: id,
+        delFlag: DeleteFlagEnum.NORMAL,
+      },
+    });
+    return res;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  /**
+   * 更新岗位
+   * @param updatePostDto
+   */
+  async update(updatePostDto: UpdatePostDto) {
+    const res = await this.postRepository.update({ postId: updatePostDto.postId }, updatePostDto);
+    return res;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  /**
+   * 删除岗位
+   * @param ids
+   */
+  async remove(ids: string) {
+    const postIds = ids.split(',').map((id) => +id);
+    const data = await this.postRepository.update(
+      { postId: In(postIds) },
+      {
+        delFlag: DeleteFlagEnum.DELETE,
+      },
+    );
+    return data;
   }
 }
