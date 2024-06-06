@@ -76,3 +76,9 @@ export enum MenuTypeEnum {
   C = 'C',
   F = 'F',
 }
+
+// 信息类型
+export enum TypeEnum {
+  Instruct = '1',
+  Notice = '2',
+}
