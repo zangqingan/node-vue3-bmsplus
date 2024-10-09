@@ -3,7 +3,7 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
 
-import { LoginDto, RegisterDto } from 'src/common/dto/index';
+import { LoginDto, RegisterDto } from '@/common/dto/index';
 
 @ApiTags('公共接口')
 @Controller()

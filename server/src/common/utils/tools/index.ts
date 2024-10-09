@@ -33,9 +33,14 @@ export function getNowDate() {
 export function getClientInfo(req): ClientInfoDto {
   // 返回一个agent实例
   const userAgent = Useragent.parse(req.headers['User-Agent'] || '');
+  // 特殊ip转换
+  let currentIp = req.clientIp
+  if (req.clientIp?.includes('127.0.0.1') || req.clientIp == '::1') {
+    currentIp = '127.0.0.1'
+  }
   return {
     userAgent: req.headers['User-Agent'],
-    ipAddr: req.clientIp,
+    ipAddr: currentIp,
     os: userAgent.os.toJSON().family,
     browser: userAgent.toAgent(),
     loginLocation: '',

@@ -4,7 +4,7 @@ import { RedisClientType } from 'redis';
 @Injectable()
 export class RedisService {
   /**
-   * 注入全局redis模块
+   * 注入 redisClient
    */
   @Inject('REDIS_CLIENT')
   private redisClient: RedisClientType;
@@ -14,7 +14,7 @@ export class RedisService {
    * @returns 键值对应的值
    */
   async get(key: string) {
-    return this.redisClient.get(key);
+    return await this.redisClient.get(key);
   }
 
   /**
@@ -24,6 +24,14 @@ export class RedisService {
    * @returns
    */
   async set(key: string, value: string, expire?: number) {
-    return this.redisClient.set(key, value, { EX: expire });
+    await this.redisClient.set(key, value, { EX: expire });
+  }
+
+  /**
+   * @param key 键值
+   * @returns
+   */
+  async del(key: string) {
+    return await this.redisClient.del(key);
   }
 }

@@ -39,7 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // console.log('redis中缓存的数据', user);
     // 如果用用户信息，代表 token 没有过期，没有则 token 已失效
     if (!user) throw new UnauthorizedException('登录已过期，请重新登录');
-    //  可以使用 req.user 获取当前登录用户信息
+    //  可以使用 req.user 获取当前登录用户信息、这里是json字符串
     return user;
   }
 }

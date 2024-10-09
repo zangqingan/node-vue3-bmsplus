@@ -1,14 +1,15 @@
 import * as svgCaptcha from 'svg-captcha';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
-import { UserService } from './modules/system/user/user.service';
-import { AxiosService } from 'src/common/utils/axios/axios.service';
 import { LoginLogService } from './modules/monitor/login-log/login-log.service';
+import { AxiosService } from './common/utils/axios/axios.service';
+import { RedisService } from './common/utils/redis/redis.service';
+import { UserService } from './modules/system/user/user.service';
 
-import { RedisService } from 'src/common/utils/redis/redis.service';
-import { LoginDto, RegisterDto } from 'src/common/dto/index';
-import { generateUUID, getClientInfo } from 'src/common/utils/tools';
+import { generateUUID, getClientInfo, getNowDate } from './common/utils/tools';
+import { LoginDto, RegisterDto } from './common/dto/index';
+import { CacheEnum } from './common/enum';
 
 @Injectable()
 export class AppService {
@@ -30,18 +31,21 @@ export class AppService {
     // 构建用户登录日志信息
     const userLoginInfo = {
       ...clientInfo,
-      userName: user.userName,
+      userName: user.username,
       status: '0',
       msg: '',
+      loginTime: getNowDate(),
     };
     try {
       // 获取ip对应的地址信息
       const addressInfo = await this.axiosService.getIpAddress(clientInfo.ipAddr);
       userLoginInfo.loginLocation = addressInfo;
+      // 校验验证码
+      await this.validCaptcha(user.uuid,user.code)
       // 登录
-      const result = await this.userService.login(user);
-      userLoginInfo.msg = result.message;
-      return result;
+      const { token, message } = await this.userService.login(user);
+      userLoginInfo.msg = message;
+      return token;
     } catch (error) {
       // 发生错误时修改登录日志信息
       userLoginInfo.status = '1';
@@ -84,7 +88,8 @@ export class AppService {
 
     // 生成唯一id,并对验证码进行存储同时设置60s有效期
     const uniqueId = generateUUID();
-    await this.redisService.set(uniqueId, captcha.text, 60);
+    await this.redisService.set(`${CacheEnum.CAPTCHA_CODE_KEY}${uniqueId}`, captcha.text, 60);
+
 
     // 对数据部分加密并返回
     const svgData = Buffer.from(captcha.data).toString('base64');
@@ -95,22 +100,38 @@ export class AppService {
   }
 
   /**
+   * 校验验证码
+   * @param uuid
+   * @param code
+   * @returns
+   */
+  async validCaptcha(uuid,code) {
+    // 从redis中获取验证码
+    const isCaptcha = await this.redisService.get(`${CacheEnum.CAPTCHA_CODE_KEY}${uuid}`);
+    if(!isCaptcha) {
+      throw new HttpException('验证码已过期', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    if(code !== isCaptcha) {
+      await this.redisService.del(`${CacheEnum.CAPTCHA_CODE_KEY}${uuid}`);
+      throw new HttpException('验证码错误', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
    * 获取用户信息
    * @param userId
    * @returns
    */
   async getInfo(req) {
-    // 会从redis中获取缓存的用户信息
+    // 会从redis中获取缓存的用户信息-所以必须登录
     const user = JSON.parse(req.user);
     return {
-      message: '操作成功',
-      user: { ...user.user },
+      ...user.user
     };
   }
 
   async getRoutes() {
     return {
-      message: '操作成功',
       data: [
         {
           name: 'System',

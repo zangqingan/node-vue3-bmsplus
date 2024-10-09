@@ -1,24 +1,25 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'; // 核心定义模块装饰器
+import { APP_GUARD } from '@nestjs/core'; // 全局注册守卫
 import { ConfigModule, ConfigService } from '@nestjs/config'; //导入配置模块
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'; // 配置连接数据库
-import { APP_GUARD } from '@nestjs/core'; // 全局注册守卫
 
 import configuration from './config'; // 自定义的配置项
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
+// 模块
 import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
 import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
 import { SysConfigModule } from './modules/system/config/config.module';
 import { NoticeModule } from './modules/system/notice/notice.module';
-import { RedisModule } from './common/utils/redis/redis.module';
-import { AxiosModule } from './common/utils/axios/axios.module';
 import { UserModule } from './modules/system/user/user.module';
 import { RoleModule } from './modules/system/role/role.module';
 import { PostModule } from './modules/system/post/post.module';
 import { DeptModule } from './modules/system/dept/dept.module';
 import { MenuModule } from './modules/system/menu/menu.module';
 import { DictModule } from './modules/system/dict/dict.module';
+import { RedisModule } from './common/utils/redis/redis.module';
+import { AxiosModule } from './common/utils/axios/axios.module';
 import { AuthModule } from './common/utils/auth/auth.module';
 
 import { JwtAuthGuard } from './common/guards/auth/auth.guard';

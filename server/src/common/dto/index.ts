@@ -18,7 +18,7 @@ export class LoginDto {
   @ApiProperty({ required: true })
   @IsString()
   @Length(2, 10)
-  userName: string;
+  username: string;
 
   @ApiProperty({ required: true })
   @IsString()

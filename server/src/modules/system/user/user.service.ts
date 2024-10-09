@@ -299,7 +299,7 @@ export class UserService {
     // 根据传入的用户名和密码数据查询数据库
     const isExist = await this.userRepository.findOne({
       where: {
-        userName: user.userName,
+        userName: user.username,
         password: user.password,
       },
       select: ['userId'],
@@ -311,24 +311,24 @@ export class UserService {
     const userData = await this.getUserInfo(isExist.userId);
 
     // 判断账号是否正常状态
-    if (userData.delFlag === DeleteFlagEnum.DELETE) {
+    if (userData.user.delFlag === DeleteFlagEnum.DELETE) {
       throw new HttpException('帐号已被禁用，如需正常使用请联系管理员', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    if (userData.status === StatusEnum.STOP) {
+    if (userData.user.status === StatusEnum.STOP) {
       throw new HttpException('帐号已被停用，如需正常使用请联系管理员', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // 生成token
     const uniqueId = generateUUID();
-    const token = await this.authService.createToken({ uuid: uniqueId, userId: userData.userId });
+    const token = await this.authService.createToken({ uuid: uniqueId, userId: userData.user.userId });
 
     // 登录信息存redis
     const cacheData = {
       token: uniqueId,
       user: userData,
-      userId: userData.userId,
-      username: userData.userName,
-      deptId: userData.deptId,
+      userId: userData.user.userId,
+      username: userData.user.userName,
+      deptId: userData.user.deptId,
     };
     await this.redisService.set(`${CacheEnum.LOGIN_TOKEN_KEY}${uniqueId}`, JSON.stringify(cacheData), 60 * 60 * 24);
 
@@ -346,7 +346,7 @@ export class UserService {
     const loginDate = getNowDate();
     const isExist = await this.userRepository.findOne({
       where: {
-        userName: user.userName,
+        userName: user.username,
       },
       select: ['userId'],
     });
@@ -359,14 +359,15 @@ export class UserService {
   }
 
   /**
-   * 根据用户id获取用户详细信息
+   * 根据用户id获取用户详细信息，包括权限和角色
    * @param userId
    */
   async getUserInfo(userId: number) {
+    // 
     //  创建查询器连表查询
     const userQueryResult = await this.userRepository
       .createQueryBuilder('user') // user表别名
-      .where({ userId })
+      .where({ userId,status: StatusEnum.NORMAL })
       // 联表查询获取匹配到的第一条数据：在user中dept字段存储、SysDeptEntity获取仓库信息、仓库别名'dept'、查询条件'dept.deptId = user.deptId'。
       .leftJoinAndMapOne('user.dept', SysDeptEntity, 'dept', 'dept.deptId = user.deptId')
       .getOne();
@@ -375,6 +376,8 @@ export class UserService {
     const roleIds = await this.getRoleIdList(userId);
     // 调用roleService层获取角色信息
     const rolesList = await this.roleService.findRoleByIds(roleIds);
+    // 只要角色key
+    const roles = rolesList.map((v) => v.roleKey)
 
     // 获取用户岗位列表
     const postIds = await this.getPostIdList(userId);
@@ -383,7 +386,10 @@ export class UserService {
     // 组装数据返回
     userQueryResult['roles'] = rolesList;
     userQueryResult['posts'] = postsList;
-    return userQueryResult;
+    return {
+      user:userQueryResult,
+      roles,
+    };
   }
 
   /**

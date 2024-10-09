@@ -1,16 +1,17 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory } from '@nestjs/core'; // 引入nestjs核心模块
+import { NestExpressApplication } from '@nestjs/platform-express'; // 指定底层平台
 import { ConfigService } from '@nestjs/config'; // 引入配置服务
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // 引入swagger配置
 import { rateLimit } from 'express-rate-limit'; // 引入限流中间件
 import helmet from 'helmet'; // 引入helmet防常见漏洞
 import { mw } from 'request-ip'; // 引入获取请求真实ip
 
-import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe';
-import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
-import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor';
+import { AppModule } from './app.module'; // 引入根模块
+import { ValidationPipePipe } from './common/pipes/validation-pipe/validation-pipe.pipe'; // 引入参数验证管道
+import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter'; // 引入数据格式化响应拦截器
+import { TransformInterceptor } from './common/interceptors/transform/transform.interceptor'; // 引入异常处理过滤器
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });// 第二个参数表示允许跨域
 
   // 获取配置服务实例
   const configService = app.get(ConfigService);
@@ -29,7 +30,7 @@ async function bootstrap() {
   // 设置helmet防常见漏洞
   app.use(helmet());
 
-  // 获取请求的真实ip地址默认挂载在 req.clientIp 属性上
+  // 获取请求的真实ip地址,默认会自动挂载在 req.clientIp 属性上
   app.use(mw());
 
   // 配置swagger
