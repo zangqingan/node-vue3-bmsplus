@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import * as Useragent from 'useragent';
 import { v4 as uuidV4 } from 'uuid';
+import { capitalize } from 'lodash'
 
 import { ClientInfoDto } from 'src/common/dto';
 
@@ -117,3 +118,95 @@ export function arrayToTree(items) {
   }
   return result;
 }
+
+  /**@desc 菜单树形化 */
+
+export function MenuTree(arr = [], id = 'id', pid = 'pid', rootValue = 0) {
+    const result = [];
+    const map = {};
+    for (const item of arr) {
+      map[item[id]] = {
+        component: item.component,
+        hidden: item.visible == 0,
+        name: capitalize(item.path?.replaceAll('/', '')),
+        path: item.path,
+        meta: {
+          icon: item.icon,
+          link: null,
+          noCache: item.isCache == 0,
+          title: item.menuName,
+        },
+        children: map[item[id]]?.children || [],
+      };
+      if (item[pid] == rootValue && item.menuType === 'M') {
+        map[item[id]].alwaysShow = true;
+        map[item[id]].component = map[item[id]].component || 'Layout';
+        map[item[id]].redirect = 'noRedirect';
+        map[item[id]].path = '/' + (map[item[id]].path || map[item[id]].path);
+        result.push(map[item[id]]);
+      } else if (item[pid] == rootValue && item.menuType === 'C') {
+        //是外链
+        if (item.isFrame == '1') {
+          result.unshift({
+            component: 'Layout',
+            hidden: item.visible == 0,
+            name: item.path,
+            path: item.path,
+            meta: {
+              icon: item.icon,
+              link: true,
+              noCache: item.isCache == 0,
+              title: item.menuName,
+            },
+          });
+        } else {
+          //顶级菜单
+          result.unshift({
+            path: '/',
+            component: 'Layout',
+            hidden: item.visible == 0,
+            meta: {
+              icon: item.icon,
+              link: null,
+              noCache: item.isCache == 0,
+              title: item.menuName,
+            },
+            children: [
+              {
+                component: item.component,
+                hidden: item.visible == 0,
+                name: capitalize(item.path?.replaceAll('/', '')),
+                path: item.path,
+                meta: {
+                  icon: item.icon,
+                  link: null,
+                  noCache: item.isCache == 0,
+                  title: item.menuName,
+                },
+              },
+            ],
+          });
+        }
+      } else {
+        if (!map[item[pid]]) {
+          map[item[pid]] = {
+            children: [],
+          };
+        }
+        map[item[pid]].children.push(map[item[id]]);
+      }
+    }
+
+    for (const k in map) {
+      if (!map[k].children.length) {
+        delete map[k].children;
+      } else {
+        map[k]['alwaysShow'] = true;
+        map[k]['redirect'] = 'noRedirect';
+        if (!map[k]['component']) {
+          map[k]['component'] = 'ParentView';
+        }
+      }
+    }
+    return result;
+  }

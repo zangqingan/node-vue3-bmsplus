@@ -10,9 +10,10 @@ import { User } from './entities/user.entity'; // 引入用户实体
 import { SysUserWithRoleEntity } from './entities/user-roles.entity'; // 引入用户角色关联表用于联查用户对应角色信息
 import { SysUserWithPostEntity } from './entities/user-posts.entity'; // 引入用户角色关联表用于联查用户对应角色信息
 import { SysDeptEntity } from '../dept/entities/dept.entity'; // 引入部门表用于联查
+import { SysMenuEntity } from '../menu/entities/menu.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, SysUserWithRoleEntity, SysUserWithPostEntity, SysDeptEntity]), RoleModule, PostModule, DeptModule],
+  imports: [TypeOrmModule.forFeature([User, SysUserWithRoleEntity, SysUserWithPostEntity, SysDeptEntity, SysMenuEntity]), RoleModule, PostModule, DeptModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService], // 导出用户服务

@@ -10,6 +10,7 @@ import { CreateRoleDto, ListRoleDto, UpdateRoleDto, ChangeStatusDto } from './dt
 import { SysRoleEntity } from './entities/role.entity';
 import { SysRoleWithDeptEntity } from './entities/role-dept.entity';
 import { SysRoleWithMenuEntity } from './entities/role-menu.entity';
+import { SysMenuEntity } from '../menu/entities/menu.entity'
 
 @Injectable()
 export class RoleService {
@@ -20,7 +21,9 @@ export class RoleService {
     private readonly sysRoleWithDeptRepository: Repository<SysRoleWithDeptEntity>,
     @InjectRepository(SysRoleWithMenuEntity)
     private readonly sysRoleWithMenuRepository: Repository<SysRoleWithMenuEntity>,
-
+    @InjectRepository(SysMenuEntity)
+    private readonly sysMenuRepository: Repository<SysMenuEntity>,
+    
     private readonly deptService: DeptService,
   ) {}
 
@@ -234,5 +237,34 @@ export class RoleService {
     });
     // 将查询结果映射为仅包含部门ID的数组并返回。
     return res.map((item) => item.deptId);
+  }
+
+  /**
+   * 根据角色组获取所有权限
+   */
+  async getRolePermission(roles) {
+    // 角色组如果有超级会员就直接返回所有
+    const hasAdmin = roles.some((role) => role.dataScope === '1');
+    if(hasAdmin) return ['*:*:*'];
+    // 没有超级管理员则遍历角色组获取每一个角色的权限
+    const roleIds = roles.map((role) => role.roleId);
+    const perms: string[] = [];
+    // 创建查询器
+    const result  = await  this.sysMenuRepository
+      .createQueryBuilder('menu')
+      .leftJoinAndSelect(SysRoleWithMenuEntity,'roleWithMenu','menu.menuId = roleWithMenu.menuId')
+      .leftJoinAndSelect(SysRoleEntity,'role','roleWithMenu.roleId = role.roleId')
+      .where('menu.status = :status', { status: '0' })
+      .andWhere('role.roleId IN (:...roleIds)', { roleIds })
+      .getMany();
+
+    // 遍历结果，将权限添加到数组中
+    result.forEach((menu) => {
+      if(menu && menu.perms) {
+        perms.push(menu.perms)
+      }
+    });
+    return Array.from(new Set(perms));
+    
   }
 }

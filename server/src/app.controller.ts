@@ -15,7 +15,7 @@ export class AppController {
   @HttpCode(200)
   async test(@Request() req): Promise<any> {
     console.log(req.clientIp);
-    return 'result';
+    return this.appService.test();
   }
 
   @ApiOperation({ summary: '用户登录' })
@@ -56,9 +56,10 @@ export class AppController {
   }
 
   @ApiOperation({ summary: '获取动态路由' })
+  
   @Get('/getRouters')
   @HttpCode(200)
-  async getRoutes() {
-    return this.appService.getRoutes();
+  async getRoutes(@Request() req) {
+    return this.appService.getRoutes(req);
   }
 }

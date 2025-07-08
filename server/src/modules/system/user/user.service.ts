@@ -10,7 +10,7 @@ import { DeptService } from '../dept/dept.service';
 
 import { DeleteFlagEnum, StatusEnum, CacheEnum, DataScopeEnum } from 'src/common/enum';
 import { LoginDto, RegisterDto } from 'src/common/dto';
-import { generateUUID, getNowDate } from 'src/common/utils/tools';
+import { generateUUID, getNowDate, MenuTree } from 'src/common/utils/tools';
 
 import { ListUserDto, CreateUserDto, UpdateUserDto, ChangeStatusDto, ResetPwdDto } from './dto/index';
 
@@ -18,6 +18,7 @@ import { User } from './entities/user.entity';
 import { SysUserWithRoleEntity } from './entities/user-roles.entity';
 import { SysUserWithPostEntity } from './entities/user-posts.entity';
 import { SysDeptEntity } from '../dept/entities/dept.entity'; // 引入部门表用于联查
+import { SysMenuEntity } from '../menu/entities/menu.entity'
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,8 @@ export class UserService {
     private userWithRoleRepository: Repository<SysUserWithRoleEntity>,
     @InjectRepository(SysUserWithPostEntity)
     private userWithPostRepository: Repository<SysUserWithPostEntity>,
+    @InjectRepository(SysMenuEntity)
+    private sysMenuRepository: Repository<SysMenuEntity>,
 
     // 注入服务层
     private readonly redisService: RedisService,
@@ -310,6 +313,7 @@ export class UserService {
     // 获取用户信息
     const userData = await this.getUserInfo(isExist.userId);
 
+
     // 判断账号是否正常状态
     if (userData.user.delFlag === DeleteFlagEnum.DELETE) {
       throw new HttpException('帐号已被禁用，如需正常使用请联系管理员', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -376,6 +380,8 @@ export class UserService {
     const roleIds = await this.getRoleIdList(userId);
     // 调用roleService层获取角色信息
     const rolesList = await this.roleService.findRoleByIds(roleIds);
+    //  调用roleService层获取角色组对应的所有权限
+    const permissions = await this.roleService.getRolePermission(rolesList);
     // 只要角色key
     const roles = rolesList.map((v) => v.roleKey)
 
@@ -389,6 +395,7 @@ export class UserService {
     return {
       user:userQueryResult,
       roles,
+      permissions,
     };
   }
 
@@ -415,4 +422,36 @@ export class UserService {
     const postIds = postList.map((item) => item.postId);
     return postIds;
   }
+  
+  async test() {
+    const permissions = await this.roleService.getRolePermission([{roleId:'2'},{roleId:'3'}]);
+    return permissions;
+  }
+  
+  /**
+   * 根据用户id获取用户能访问的所有路由
+   * @param userId 
+   */
+  async getRoutes(userId: number) {
+    console.log('userId',userId)
+    // 如果是管理员、返回所有
+    if(userId === 1) {
+      const result = await this.sysMenuRepository.find({
+        where: {
+          status: '0', 
+          menuType: In(['M', 'C'])
+        },
+        order: {
+          parentId: 'ASC',
+          orderNum: 'ASC',
+        },
+      });
+      console.log('result',result)
+      
+      return result;
+    }
+    
+
+  }
+  
 }

@@ -7,7 +7,7 @@ import { pathToRegexp } from 'path-to-regexp';
 
 import { AuthService } from 'src/common/utils/auth/auth.service';
 import { UserService } from 'src/modules/system/user/user.service';
-import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from 'src/common/constants/decorator.contant';
 
 /**
  * 创建自定义守卫类，防止在代码库中引入魔术字符串
