@@ -8,15 +8,15 @@ import { BaseEntity } from '@/common/entities/base';
   comment: '岗位信息表',
 })
 export class SysPostEntity extends BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'post_id', comment: '岗位ID' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'post_id', comment: '岗位ID' })
   postId: number;
 
-  @Column({ type: 'varchar', name: 'post_code', length: 64, comment: '岗位编码' })
+  @Column({ type: 'varchar', name: 'post_code', length: 64, nullable: false, comment: '岗位编码' })
   postCode: string;
 
-  @Column({ type: 'varchar', name: 'post_name', length: 50, comment: '岗位名称' })
+  @Column({ type: 'varchar', name: 'post_name', length: 50, nullable: false, comment: '岗位名称' })
   postName: string;
 
-  @Column({ type: 'int', name: 'post_sort', default: 0, comment: '显示顺序' })
+  @Column({ type: 'int', name: 'post_sort', default: 0, nullable: false, comment: '显示顺序' })
   postSort: number;
 }
