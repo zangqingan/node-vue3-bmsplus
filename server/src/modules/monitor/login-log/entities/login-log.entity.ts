@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base';
+import { BaseEntity } from '@/common/entities/base';
 
 /**
  * @description:系统访问记录

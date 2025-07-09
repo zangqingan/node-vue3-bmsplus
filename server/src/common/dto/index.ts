@@ -29,7 +29,7 @@ export class LoginDto {
 /**
  * 注册DTO
  */
-export class RegisterDto extends LoginDto {}
+export class RegisterDto extends LoginDto { }
 
 /**
  * 客户端信息DTO
@@ -88,4 +88,19 @@ export class PagingDto {
   @IsOptional()
   @IsString()
   isAsc?: 'ascending' | 'descending';
+}
+
+/**
+ * 获取图片验证码DTO
+ */
+export class CaptchaDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  img?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  uniqueId?: string;
 }

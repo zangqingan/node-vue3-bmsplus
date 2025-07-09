@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { BaseEntity } from 'src/common/entities/base';
+import { BaseEntity } from '@/common/entities/base';
 
 /**
- * 用户信息实体类对应表 - sys_user
+ * @description: 用户信息表
  */
 @Entity('sys_user', {
   comment: '用户信息表',
@@ -12,7 +12,7 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'bigint', name: 'user_id', comment: '用户ID' })
   userId: number;
 
-  @Column({ type: 'int', name: 'dept_id', default: null, comment: '部门ID' })
+  @Column({ type: 'bigint', name: 'dept_id', default: null, comment: '部门ID' })
   deptId: number;
 
   @Column({ type: 'varchar', name: 'user_name', length: 30, nullable: false, comment: '用户账号' })
@@ -21,30 +21,31 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', name: 'nick_name', length: 30, nullable: false, comment: '用户昵称' })
   nickName: string;
 
-  //00系统用户
-  @Column({ type: 'varchar', name: 'user_type', length: 2, default: '00', comment: '用户类型' })
+  @Column({ type: 'varchar', name: 'user_type', length: 2, default: '00', comment: '用户类型(00系统用户)' })
   userType: string;
 
-  @Column({ type: 'varchar', name: 'email', length: 50, default: '', comment: '邮箱' })
+  @Column({ type: 'varchar', name: 'email', length: 50, default: '', comment: '用户邮箱' })
   email: string;
 
   @Column({ type: 'varchar', name: 'phone_number', default: '', length: 11, comment: '手机号码' })
   phoneNumber: string;
 
-  //0男 1女 2未知
-  @Column({ type: 'char', name: 'gender', default: '0', length: 1, comment: '性别' })
+  @Column({ type: 'char', name: 'gender', default: '0', length: 1, comment: '用户性别(0男 1女 2未知)' })
   gender: string;
 
-  @Column({ type: 'varchar', name: 'avatar', default: '', comment: '头像地址' })
+  @Column({ type: 'varchar', name: 'avatar', default: '', length: 100, comment: '头像地址' })
   avatar: string;
 
   @Exclude({ toPlainOnly: true }) // 查询时不返回密码字段
-  @Column({ type: 'varchar', length: 200, nullable: false, comment: '用户登录密码' })
+  @Column({ type: 'varchar', length: 100, nullable: false, comment: '用户登录密码' })
   password: string;
 
   @Column({ type: 'varchar', name: 'login_ip', length: 128, default: '', comment: '最后登录IP' })
   loginIp: string;
 
-  @Column({ type: 'timestamp', name: 'login_date', comment: '最后登录时间' })
+  @CreateDateColumn({ type: 'timestamp', name: 'login_date', comment: '最后登录时间' })
   loginDate: Date;
+
+  @CreateDateColumn({ type: 'timestamp', name: 'pwd_update_date', comment: '密码最后更新时间' })
+  pwdUpdateDate: Date;
 }

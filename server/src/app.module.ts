@@ -23,10 +23,11 @@ import { AxiosModule } from './common/utils/axios/axios.module';
 import { AuthModule } from './common/utils/auth/auth.module';
 
 import { JwtAuthGuard } from './common/guards/auth/auth.guard';
+import { PermissionGuard } from './common/guards/permission/permission.guard';
 
 @Module({
   imports: [
-    // 注册 ConfigService 提供者实现配置项的读取
+    // 注册 ConfigService 提供者实现配置项的读取 
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
@@ -40,7 +41,7 @@ import { JwtAuthGuard } from './common/guards/auth/auth.guard';
         return {
           type: 'mysql',
           keepConnectionAlive: true,
-          synchronize: false,
+          synchronize: false,//如果为true，自动载入的模型将同步
           entities: [`${__dirname}/**/*.entity{.ts,.js}`], // 加载所有的实体文件
           autoLoadEntities: true,
           ...configService.get('db.mysql'),
@@ -64,10 +65,16 @@ import { JwtAuthGuard } from './common/guards/auth/auth.guard';
   controllers: [AppController],
   providers: [
     AppService,
+    // 认证守卫
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    // 权限校验守卫
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    }
   ],
 })
-export class AppModule {}
+export class AppModule { }

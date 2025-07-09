@@ -7,13 +7,13 @@ import { CreateDeptDto, UpdateDeptDto } from './dto';
 @ApiTags('部门管理')
 @Controller('system/dept')
 export class DeptController {
-  constructor(private readonly deptService: DeptService) {}
+  constructor(private readonly deptService: DeptService) { }
 
   @ApiOperation({ summary: '部门管理-创建' })
   @ApiBody({ type: CreateDeptDto, required: true })
   @Post()
-  create(@Body() createDeptDto: CreateDeptDto) {
-    return this.deptService.create(createDeptDto);
+  async create(@Body() createDeptDto: CreateDeptDto) {
+    return await this.deptService.create(createDeptDto);
   }
 
   @ApiOperation({ summary: '部门管理-列表' })

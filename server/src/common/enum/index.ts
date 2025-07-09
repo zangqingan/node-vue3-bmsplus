@@ -82,3 +82,13 @@ export enum TypeEnum {
   Instruct = '1',
   Notice = '2',
 }
+
+/**
+ * 权限模式
+ * @description OR = 0  具备任意一个权限都具备 
+ * @description AND = 1 所有权限都具备
+ */
+export enum PermissionModeEnum {
+  OR = 0,
+  AND = 1,
+}

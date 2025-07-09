@@ -1,14 +1,15 @@
-import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-//基础抽象实体信息类
-@Entity()
+/**
+ * @description: 基础抽象实体信息类
+ */
 export abstract class BaseEntity {
   //0正常 1停用
-  @Column({ type: 'char', name: 'status', default: '0', length: 1, comment: '状态' })
+  @Column({ type: 'char', name: 'status', default: '0', length: 1, comment: '状态(0正常 1停用)' })
   status: string;
 
-  //0代表存在 1代表删除
-  @Column({ type: 'char', name: 'del_flag', default: '0', length: 1, comment: '删除标志' })
+  //0代表存在 2代表删除
+  @Column({ type: 'char', name: 'del_flag', default: '0', length: 1, comment: '删除标志(0代表存在 2代表删除)' })
   delFlag: string;
 
   @Column({ type: 'varchar', name: 'create_by', length: 64, default: '', comment: '创建者' })
@@ -24,5 +25,5 @@ export abstract class BaseEntity {
   updateBy: string;
 
   @Column({ type: 'varchar', name: 'remark', length: 500, default: '', comment: '备注' })
-  remark: string;
+  remark?: string;
 }

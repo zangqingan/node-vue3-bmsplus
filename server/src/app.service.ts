@@ -18,7 +18,7 @@ export class AppService {
     private readonly redisService: RedisService,
     private readonly axiosService: AxiosService,
     private readonly loginLogService: LoginLogService,
-  ) {}
+  ) { }
 
   async test() {
     return await this.userService.test();
@@ -44,7 +44,8 @@ export class AppService {
       const addressInfo = await this.axiosService.getIpAddress(clientInfo.ipAddr);
       userLoginInfo.loginLocation = addressInfo;
       // 校验验证码
-      await this.validCaptcha(user.uuid,user.code)
+      console.log('userLoginInfo', user)
+      await this.validCaptcha(user.uuid, user.code)
       // 登录
       const { token, message } = await this.userService.login(user);
       userLoginInfo.msg = message;
@@ -83,7 +84,7 @@ export class AppService {
   async generateCaptcha() {
     const captcha = svgCaptcha.create({
       size: 4, // 验证码长度
-      ignoreChars: '0o1i', // 排除 0o1i
+      ignoreChars: '0o1i', // 验证码字符排除 0o1i
       noise: 2, // 噪声线条数量
       color: true, // 验证码的字符有颜色，而不是黑白
       background: '#cc9966', // 背景颜色
@@ -98,23 +99,24 @@ export class AppService {
     const svgData = Buffer.from(captcha.data).toString('base64');
     return {
       uniqueId,
-      img:svgData,
+      img: svgData,
     };
   }
 
   /**
-   * 校验验证码
+   * 校验验证码 
    * @param uuid
    * @param code
    * @returns
    */
-  async validCaptcha(uuid,code) {
+  async validCaptcha(uuid, code) {
     // 从redis中获取验证码
     const isCaptcha = await this.redisService.get(`${CacheEnum.CAPTCHA_CODE_KEY}${uuid}`);
-    if(!isCaptcha) {
+    if (!isCaptcha) {
       throw new HttpException('验证码已过期', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    if(code !== isCaptcha) {
+    console.log("code", code)
+    if (code !== isCaptcha) {
       await this.redisService.del(`${CacheEnum.CAPTCHA_CODE_KEY}${uuid}`);
       throw new HttpException('验证码错误', HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -122,7 +124,7 @@ export class AppService {
 
   /**
    * 获取用户信息
-   * @param userId
+   * @param userId 
    * @returns
    */
   async getInfo(req) {

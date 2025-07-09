@@ -1,14 +1,15 @@
 import { Controller, Post, Body, HttpCode, Get, Request } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+// 引入dto
+import { LoginDto, RegisterDto, CaptchaDto } from '@/common/dto';
+// 引入根服务
+import { AppService } from '@/app.service';
 
-import { AppService } from './app.service';
-
-import { LoginDto, RegisterDto } from '@/common/dto/index';
 
 @ApiTags('公共接口')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) { }
 
   @ApiOperation({ summary: '测试接口' })
   @Get('/test')
@@ -44,7 +45,7 @@ export class AppController {
 
   @ApiOperation({ summary: '获取验证码' })
   @Get('/captchaImage')
-  async captchaImage() {
+  async captchaImage(): Promise<CaptchaDto> {
     return this.appService.generateCaptcha();
   }
 
@@ -56,7 +57,7 @@ export class AppController {
   }
 
   @ApiOperation({ summary: '获取动态路由' })
-  
+
   @Get('/getRouters')
   @HttpCode(200)
   async getRoutes(@Request() req) {

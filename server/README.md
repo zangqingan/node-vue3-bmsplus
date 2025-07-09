@@ -146,6 +146,11 @@ $ nest g module common/utils/axios --no-spec
 $ nest g service common/utils/axios --no-spec
 ```
 
+### 11. 配置权限全局守卫
+```bash
+$ nest g guard common/guards/permission --no-spec
+```
+
 
 
 ## 四、系统内置业务模块开发

@@ -1,6 +1,6 @@
-export class Dict {}
+export class Dict { }
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from 'src/common/entities/base';
+import { BaseEntity } from '@/common/entities/base';
 
 /**
  * @description:字典类型表
