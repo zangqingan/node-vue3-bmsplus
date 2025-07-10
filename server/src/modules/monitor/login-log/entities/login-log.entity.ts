@@ -14,8 +14,8 @@ export class MonitorLoginLogEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'user_name', length: 50, default: '', comment: '用户账号' })
   userName: string;
 
-  @Column({ type: 'varchar', name: 'ip_addr', length: 128, default: '', comment: '登录IP地址' })
-  ipAddr: string;
+  @Column({ type: 'varchar', name: 'ip_address', length: 128, default: '', comment: '登录IP地址' })
+  ipAddress: string;
 
   @Column({ type: 'varchar', name: 'login_location', length: 255, default: '', comment: '登录地点' })
   loginLocation: string;

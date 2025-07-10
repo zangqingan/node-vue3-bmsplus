@@ -9,7 +9,7 @@ import { BaseEntity } from '@/common/entities/base';
   comment: '字典数据表',
 })
 export class SysDictDataEntity extends BaseEntity {
-  @PrimaryGeneratedColumn({ name: 'dict_code', comment: '字典主键' })
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'dict_code', comment: '字典主键' })
   dictCode: number;
 
   @Column({ type: 'int', name: 'dict_sort', default: 0, comment: '字典排序' })
@@ -24,15 +24,12 @@ export class SysDictDataEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'dict_type', length: 100, comment: '字典类型' })
   dictType: string;
 
-  //样式属性（其他样式扩展）
-  @Column({ type: 'varchar', name: 'css_class', length: 100, default: '', comment: '样式属性' })
+  @Column({ type: 'varchar', name: 'css_class', length: 100, default: '', comment: '样式属性(其他样式扩展)' })
   cssClass: string;
 
-  //样式属性（其他样式扩展）
   @Column({ type: 'varchar', name: 'list_class', length: 100, comment: '表格回显样式' })
   listClass: string;
 
-  //是否默认（Y是 N否）
-  @Column({ type: 'char', name: 'is_default', length: 1, default: 'N', comment: '是否默认' })
+  @Column({ type: 'char', name: 'is_default', length: 1, default: 'N', comment: '是否默认(Y是 N否)' })
   isDefault: string;
 }

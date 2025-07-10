@@ -1,16 +1,16 @@
 import { Entity, PrimaryColumn } from 'typeorm';
 
 /**
- * 用户和角色是多对多关系
- * 用户和角色关联表
+ * 用户N-1角色
+ * @description: 用户和角色关联表
  */
 @Entity('sys_user_role', {
   comment: '用户和角色关联表',
 })
 export class SysUserWithRoleEntity {
-  @PrimaryColumn({ type: 'int', name: 'user_id', comment: '用户ID' })
-  public userId: number;
+  @PrimaryColumn({ type: 'bigint', name: 'user_id', comment: '用户ID' })
+  userId: number;
 
-  @PrimaryColumn({ type: 'int', name: 'role_id', comment: '角色ID' })
-  public roleId: number;
+  @PrimaryColumn({ type: 'bigint', name: 'role_id', comment: '角色ID' })
+  roleId: number;
 }

@@ -20,7 +20,6 @@ export class SysConfigEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'config_value', length: 500, default: '', comment: '参数键值' })
   configValue: string;
 
-  //系统内置（Y是 N否）
-  @Column({ type: 'char', name: 'config_type', length: 1, default: 'N', comment: '系统内置' })
+  @Column({ type: 'char', name: 'config_type', length: 1, default: 'N', comment: '系统内置(Y是 N否)' })
   configType: string;
 }

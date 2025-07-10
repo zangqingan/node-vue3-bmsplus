@@ -197,14 +197,15 @@ $ nest generate resource modules/system/config --no-spec
 
 ## 五、系统监控模块开发
 
-### 1.创建系统访问记录模块
+### 1.创建日志记录模块
+包括：系统访问记录模块、和操作日志记录模块
 ```bash
-$ nest generate resource modules/monitor/loginLog --no-spec
+$ nest generate resource modules/monitor/log --no-spec
 ```
 
-### 2.创建操作日志记录模块
+### 2.创建定时任务模块
 ```bash
-$ nest generate resource modules/monitor/operationLog --no-spec
+$ nest generate resource modules/monitor/job --no-spec
 ```
 
 ## 六、安全相关
