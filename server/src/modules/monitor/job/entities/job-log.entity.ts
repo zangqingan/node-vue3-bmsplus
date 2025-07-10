@@ -2,12 +2,12 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '@/common/entities/base';
 
 /**
- * @description: 定时任务调度表
+ * @description: 定时任务调度日志表
  */
-@Entity('sys_job', {
-  comment: '定时任务调度表',
+@Entity('sys_job_log', {
+  comment: '定时任务调度日志表',
 })
-export class JobEntity extends BaseEntity {
+export class JobLogEntity {
   @PrimaryGeneratedColumn({ type: 'bigint', name: 'job_id', comment: '任务ID' })
   jobId: number;
 
