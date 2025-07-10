@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 // 模块
 import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
 import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
-import { SysConfigModule } from './modules/system/config/config.module';
+import { SysConfigModule } from './modules/system/system-config/config.module';
 import { NoticeModule } from './modules/system/notice/notice.module';
 import { UserModule } from './modules/system/user/user.module';
 import { RoleModule } from './modules/system/role/role.module';
@@ -24,6 +24,7 @@ import { AuthModule } from './common/utils/auth/auth.module';
 
 import { JwtAuthGuard } from './common/guards/auth/auth.guard';
 import { PermissionGuard } from './common/guards/permission/permission.guard';
+import { JobModule } from './modules/monitor/job/job.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { PermissionGuard } from './common/guards/permission/permission.guard';
     RedisModule,
     AuthModule,
     AxiosModule,
+    JobModule,
   ],
   controllers: [AppController],
   providers: [
