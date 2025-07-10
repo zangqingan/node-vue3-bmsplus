@@ -25,6 +25,7 @@ import { AuthModule } from './common/utils/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/auth/auth.guard';
 import { PermissionGuard } from './common/guards/permission/permission.guard';
 import { JobModule } from './modules/monitor/job/job.module';
+import { LogModule } from './modules/monitor/log/log.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { JobModule } from './modules/monitor/job/job.module';
     AuthModule,
     AxiosModule,
     JobModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [
