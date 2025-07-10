@@ -7,7 +7,7 @@ import { BaseEntity } from '@/common/entities/base';
 @Entity('sys_login_info', {
   comment: '系统访问记录',
 })
-export class MonitorLoginLogEntity extends BaseEntity {
+export class LoginInfoEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'info_id', type: 'bigint', comment: '访问ID' })
   infoId: string;
 

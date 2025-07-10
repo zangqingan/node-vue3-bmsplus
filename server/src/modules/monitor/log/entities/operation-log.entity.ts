@@ -6,7 +6,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeor
 @Entity('sys_operation_log', {
   comment: '操作日志记录',
 })
-export class MonitorOperlogEntity {
+export class OperationLogEntity {
   @PrimaryGeneratedColumn({ name: 'operation_id', type: 'bigint', comment: '日志主键' })
   operationId: string;
 
