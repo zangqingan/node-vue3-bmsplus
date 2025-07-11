@@ -2,7 +2,7 @@ import * as svgCaptcha from 'svg-captcha';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
-import { LoginLogService } from './modules/monitor/login-log/login-log.service';
+import { LogService } from './modules/monitor/log/log.service';
 import { AxiosService } from './common/utils/axios/axios.service';
 import { RedisService } from './common/utils/redis/redis.service';
 import { UserService } from './modules/system/user/user.service';
@@ -17,7 +17,7 @@ export class AppService {
     private readonly userService: UserService,
     private readonly redisService: RedisService,
     private readonly axiosService: AxiosService,
-    private readonly loginLogService: LoginLogService,
+    private readonly logService: LogService,
   ) { }
 
   async test() {
@@ -58,7 +58,7 @@ export class AppService {
       throw new HttpException(error.message, error.status);
     } finally {
       // 存储登录日志
-      await this.loginLogService.create(userLoginInfo);
+      await this.logService.create(userLoginInfo);
     }
   }
 

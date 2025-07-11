@@ -8,8 +8,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 // 模块
-import { OperationLogModule } from './modules/monitor/operation-log/operation-log.module';
-import { LoginLogModule } from './modules/monitor/login-log/login-log.module';
 import { SysConfigModule } from './modules/system/system-config/config.module';
 import { NoticeModule } from './modules/system/notice/notice.module';
 import { UserModule } from './modules/system/user/user.module';
@@ -50,6 +48,7 @@ import { LogModule } from './modules/monitor/log/log.module';
         } as TypeOrmModuleOptions;
       },
     }),
+    /* 业务模块 */
     UserModule,
     RoleModule,
     PostModule,
@@ -58,8 +57,6 @@ import { LogModule } from './modules/monitor/log/log.module';
     DictModule,
     NoticeModule,
     SysConfigModule,
-    LoginLogModule,
-    OperationLogModule,
     RedisModule,
     AuthModule,
     AxiosModule,

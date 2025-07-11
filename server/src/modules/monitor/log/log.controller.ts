@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Query, Delete } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+
 import { LogService } from './log.service';
-import { CreateLogDto } from './dto/create-log.dto';
-import { UpdateLogDto } from './dto/update-log.dto';
+import { OperationLogDto, ListLoginLogDto } from './dto/log.dto';
 
-@Controller('log')
+
+import { Permissions } from '@/common/decorators/permissions.decorator';
+
+
+@ApiTags('日志管理')
+@Controller('monitor')
 export class LogController {
-  constructor(private readonly logService: LogService) {}
+  constructor(private readonly logService: LogService) { }
 
-  @Post()
-  create(@Body() createLogDto: CreateLogDto) {
-    return this.logService.create(createLogDto);
+  /** 操作日志相关 */
+
+
+  @ApiOperation({ summary: '查询操作日志列表' })
+  @ApiQuery({ name: 'query', type: OperationLogDto })
+  @Get('operlog/list')
+  @Permissions('monitor:operlog:query')
+  async getOperationLogList(@Query() query: OperationLogDto) {
+    return await this.logService.getOperationLogList(query);
   }
 
-  @Get()
-  findAll() {
-    return this.logService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.logService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLogDto: UpdateLogDto) {
-    return this.logService.update(+id, updateLogDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.logService.remove(+id);
+  /** 登录日志相关 */
+  @ApiOperation({ summary: '查询登录日志列表' })
+  @ApiQuery({ name: 'query', type: ListLoginLogDto })
+  @Get('logininfor/list')
+  @Permissions('monitor:logininfor:query')
+  async getLoginLogList(@Query() query: ListLoginLogDto) {
+    return await this.logService.findLoginLogAll(query);
   }
 }

@@ -192,7 +192,7 @@ $ nest generate resource modules/system/notice --no-spec
 
 ### 8.创建参数配置模块
 ```bash
-$ nest generate resource modules/system/config --no-spec
+$ nest generate resource modules/system/system-config --no-spec
 ```
 
 ## 五、系统监控模块开发
