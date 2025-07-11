@@ -23,7 +23,7 @@ export class LogService {
     return await this.operationLogEntityRepository.delete(ids);
   }
   async getOperationLogList(query: OperationLogDto) {
-    const operationLogQueryResult = this.operationLogEntityRepository.createQueryBuilder('operationLog').where('entity.delFlag = :delFlag', { delFlag: DeleteFlagEnum.NORMAL });
+    const operationLogQueryResult = this.operationLogEntityRepository.createQueryBuilder('operationLog')
     if (query.title) {
       operationLogQueryResult.andWhere(`operationLog.title LIKE "%${query.title}%"`);
     }

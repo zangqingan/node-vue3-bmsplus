@@ -24,8 +24,8 @@ export class OperationLogDto extends PagingDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsNumber()
-  status?: number;
+  @IsString()
+  status?: string;
 
 }
 

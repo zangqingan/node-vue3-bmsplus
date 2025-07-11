@@ -11,7 +11,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp(); // 获取请求上下文
     const response = ctx.getResponse<Response>(); // 获取请求上下文中的 response对象
     const status = exception.getStatus() || 500; // 获取异常状态码
-    console.log('status', status);
     // 设置错误信息,没有时根据状态码值返回
     const message = exception.message ? exception.message : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
     // 定义返回数据对象

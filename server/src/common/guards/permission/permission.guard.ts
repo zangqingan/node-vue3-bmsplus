@@ -13,7 +13,7 @@ export class PermissionGuard implements CanActivate {
     // 获取路由所需的权限-比是一个字符串数组
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
       PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
+      [context.getHandler(), context.getClass()], // 先检查方法上的权限、再检查控制器上的权限
     );
 
     // 获取权限模式，默认为OR模式
@@ -27,23 +27,26 @@ export class PermissionGuard implements CanActivate {
       return true;
     }
 
-    // 有设置权限，判断当前用户是否拥有权限
+    // 有设置权限，判断当前用户是否拥有权限(从请求中获取用户权限)
     // 获取指定环境请求对象
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
-    console.log("request", request.user);
+    const user = JSON.parse(request.user)
+    const userPermissions: string[] = user?.user?.permissions || [];
+    console.log("userPermissions", userPermissions);//  
 
+    // 拥有全部权限放行
+    if (userPermissions.includes('*:*:*')) return true;
     // 检查用户是否拥有所需权限
     let hasPermission = false;
     if (permissionMode === PermissionModeEnum.AND) {
       // AND 模式 (1)：需要所有权限
       hasPermission = requiredPermissions.every(permission =>
-        user?.permissions?.includes(permission)
+        userPermissions.includes(permission)
       );
     } else {
       // OR 模式 (0)：只需任一权限
       hasPermission = requiredPermissions.some(permission =>
-        user?.permissions?.includes(permission)
+        userPermissions.includes(permission)
       );
     }
 
