@@ -150,7 +150,10 @@ $ nest g service common/utils/axios --no-spec
 ```bash
 $ nest g guard common/guards/permission --no-spec
 ```
-
+### 12 配置角色全局守卫
+```bash
+$ nest g guard common/guards/roles --no-spec
+```
 
 
 ## 四、系统内置业务模块开发

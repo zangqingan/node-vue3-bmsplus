@@ -19,11 +19,13 @@ import { DictModule } from './modules/system/dict/dict.module';
 import { RedisModule } from './common/utils/redis/redis.module';
 import { AxiosModule } from './common/utils/axios/axios.module';
 import { AuthModule } from './common/utils/auth/auth.module';
-
-import { JwtAuthGuard } from './common/guards/auth/auth.guard';
-import { PermissionGuard } from './common/guards/permission/permission.guard';
 import { JobModule } from './modules/monitor/job/job.module';
 import { LogModule } from './modules/monitor/log/log.module';
+
+// 守卫
+import { JwtAuthGuard } from './common/guards/auth/auth.guard';
+import { PermissionGuard } from './common/guards/permission/permission.guard';
+import { RolesGuard } from './common/guards/roles/roles.guard';
 
 @Module({
   imports: [
@@ -75,7 +77,12 @@ import { LogModule } from './modules/monitor/log/log.module';
     {
       provide: APP_GUARD,
       useClass: PermissionGuard,
-    }
+    },
+    // 角色校验守卫
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class AppModule { }

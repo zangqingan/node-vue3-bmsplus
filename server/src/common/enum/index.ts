@@ -92,3 +92,13 @@ export enum PermissionModeEnum {
   OR = 0,
   AND = 1,
 }
+
+/**
+ * 角色逻辑
+ * @description OR = 0  具备任意一个角色都具备 
+ * @description AND = 1 所有角色都具备
+ */
+export enum RoleLogicEnum {
+  OR = 0,   // 满足任意一个角色即可
+  AND = 1   // 需要满足所有角色
+}
