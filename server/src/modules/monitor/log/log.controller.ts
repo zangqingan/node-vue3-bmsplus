@@ -14,14 +14,19 @@ export class LogController {
   constructor(private readonly logService: LogService) { }
 
   /** 操作日志相关 */
-
-
   @ApiOperation({ summary: '查询操作日志列表' })
   @ApiQuery({ name: 'query', type: OperationLogDto })
   @Get('operlog/list')
   @Permissions('monitor:operlog:query')
   async getOperationLogList(@Query() query: OperationLogDto) {
     return await this.logService.getOperationLogList(query);
+  }
+
+  @ApiOperation({ summary: '删除操作日志' })
+  @Delete('operlog/:ids')
+  @Permissions('monitor:operlog:remove')
+  async deleteOperationLog(@Param('ids') ids: string) {
+    return await this.logService.deleteOperationLog(ids.split(','));
   }
 
   /** 登录日志相关 */
@@ -31,5 +36,12 @@ export class LogController {
   @Permissions('monitor:logininfor:query')
   async getLoginLogList(@Query() query: ListLoginLogDto) {
     return await this.logService.findLoginLogAll(query);
+  }
+
+  @ApiOperation({ summary: '删除登录日志' })
+  @Delete('logininfor/:ids')
+  @Permissions('monitor:logininfor:remove')
+  async deleteLoginLog(@Param('ids') ids: string) {
+    return await this.logService.remove(ids);
   }
 }
